@@ -1,0 +1,17 @@
+[## macro genericTable(MyData, TbWidth="7.25in") ##]
+[## set KeyCol = 'Coverages' ##]
+[## set OtherCols = ['Deductible', 'Amounts or Limits', 'Rate', 'Premium'] ##]
+\newlength\GenericTbWidth
+\setlength\GenericTbWidth{#!TbWidth!#}
+\begin{center}
+\begin{tabular}{ | A{0.3\GenericTbWidth} | A{0.25\GenericTbWidth} | A{0.2\GenericTbWidth} | A{0.1\GenericTbWidth} | A{0.15\GenericTbWidth} | }
+    \hline
+    \textbf{#!KeyCol!#} [## for eachcol in OtherCols ##] & \textbf{#!eachcol!#} [## endfor ##] \\
+    \hline
+    [## for key, attrs in MyData ##]
+    \textbf{#!key!#} [## for eachcol in OtherCols ##] & #!attrs[eachcol]|safe!# [## endfor ##] \\
+    \hline
+    [## endfor ##]
+\end{tabular}
+\end{center}
+[## endmacro ##]

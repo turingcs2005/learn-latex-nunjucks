@@ -1,0 +1,25 @@
+[## macro DescribePet(name, PetData) ##]
+[## if PetData[name]["Age"] >= 1 ##] #!name!# is a #!PetData[name]["Age"]!# year old #!PetData[name]["Species"]|lower!#
+[## else ##] #!name!# is a #!12 * PetData[name]["Age"]!# month old #!PetData[name]["Species"]|lower!# [## endif ##]
+[## endmacro ##]
+
+\documentclass[10pt]{article}
+\usepackage[letterpaper, includeheadfoot, rmargin=0.5in, lmargin=0.5in, top=0.25in, headsep=0.2in, headheight=0.5in, bmargin=0.5in]{geometry}
+
+\begin{document}
+
+\begin{center}
+\Large Welcome to our newsletter!
+
+\vspace{\baselineskip}
+\noindent \small written by #!Name!#
+\end{center}
+
+\vspace{0.5in}
+\noindent {\textbf Check out this month's featured pets!}
+
+\medskip
+[## for name, attrs in Pets ##] \noindent \textbf{#!name!#}: #!DescribePet(name, Pets)!# [## endfor ##]
+
+
+\end{document}
