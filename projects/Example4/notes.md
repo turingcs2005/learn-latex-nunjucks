@@ -1,1 +1,1 @@
-File structure, caveats
+Identifying and troubleshooting common errors

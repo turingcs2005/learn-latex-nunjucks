@@ -1,1 +1,1 @@
-More advanced Nunjucks, creating tables, helper functions
+More advanced Nunjucks, creating tables, helper functions, document structure
