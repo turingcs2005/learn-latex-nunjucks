@@ -1,0 +1,865 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[letterpaper, top=0.75in, rmargin=1in, lmargin=1in]{geometry}
+\usepackage[shortlabels]{enumitem} % for making customized lists
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{lineno}
+\usepackage{url}
+%\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{array}
+\usepackage{calc}
+
+\newcommand{\inputflag}{
+\par \noindent \underline{\textbf{INPUT}}
+}
+
+\newcommand{\outputflag}{
+\par \noindent \underline{\textbf{OUTPUT}}
+}
+
+\setlength\extrarowheight{4pt}
+\setlength\tabcolsep{0.08in}
+
+\newcolumntype{F}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\newcolumntype{A}[1]{>{\raggedright\arraybackslash}p{#1 - 2\tabcolsep}}
+
+\newcolumntype{Z}[1]{>{\raggedright\arraybackslash}X{#1}}
+
+\begin{document}
+
+\section{Quick Start}
+
+This is a quick guide that I'm working on to introduce LaTeX, but Overleaf also has very good documentation of LaTeX: \url{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}
+
+\url{http://wch.github.io/latexsheet/latexsheet.pdf}
+
+\medskip
+In this section, we'll go over how to set up a very simple LaTeX project. In the first line of your document, declare the document class. For most purposes, ``article" is fine. You'll also declare the beginning and end of your document. The lines between declaring the document class and beginning the document are referred to as the \textit{preamble}. This is where you import packages and may define custom functions (commands). It functions somewhat similarly to CSS and the HEAD of an HTML file. Your starting document might look like:
+
+\begin{verbatim}
+\documentclass{article}
+\usepackage{firstpackage}
+\usepackage{secondpackage}
+
+\begin{document}
+
+The content of my document...
+
+\end{document}
+\end{verbatim}
+
+
+\subsection{Syntax}
+\noindent Note that some of the following characters must be escaped in order to be used as text characters
+
+\begin{verbatim}
+\           Begins a command
+%           Comment out line
+{}          Parameters for commands
+[]          Brackets may indicate parameters
+&           Delimiter for alignment
+$..$        Indicates that the contents (between $) are in "math mode"
+\\          Line break
+*           TODO commands that are similar to other commands with slight changes
+\end{verbatim}
+
+\subsection{Basic Styling}
+\label{subsection:basic-styles}
+
+\noindent These are some of the most basic LaTeX commands:
+\begin{verbatim}
+\textbf{...}        Bolds the text in braces
+\textit{...}        Italicizes text in braces
+\underline{...}     Underlines the text in braces
+\hl{...}            Highlights text in brackets, requires the packages xcolor and soul
+\noindent           Prevents automatic indentation
+\newpage            Starts a new page
+\end{verbatim}
+
+\noindent By default, the font size for an article is 10pt. LaTeX defines a number of relative font sizes that adjust relative to the global font size if the global size is changed. See \url{https://www.sascha-frank.com/latex-font-size.html} for details. Note that commands are case-sensitive. Here's an example of changing sizes:
+
+\medskip
+\inputflag
+\begin{verbatim}
+{\small We're going to start small} and then {\Large get bigger}. 
+{\LARGE This is really big!} 
+{\large And this line is in between.}  
+\end{verbatim}
+%\noindent \rule{6in}{1pt}
+
+\outputflag
+
+{\small We're going to start small} and then {\Large get bigger}. 
+{\LARGE This is really big!} 
+{\large And this line is in between.}
+
+\medskip
+\noindent Some features in LaTeX allow a length to be input. LaTeX accepts cm, mm, in, pt, ex, and more. For details, see \url{https://www.overleaf.com/learn/latex/Lengths_in_LaTeX}
+
+\subsection{Images}
+An image can be included with the \textbf{graphicx} package and the file name (or path, if applicable):
+\begin{verbatim}
+\documentclass{article}
+\usepackage{graphicx}
+...
+\begin{document}
+...
+\includegraphics{MyPic.png}
+\includegraphics[scale=0.3]{MyPic.png} % optional params include scale
+...
+\end{document}
+\end{verbatim}
+
+\subsection{Environments}
+
+\noindent LaTeX also has \textit{environments}, which apply formatting rules to the text within the environment. The syntax for beginning and ending an environment is:
+\begin{verbatim}
+\begin{environment}
+...
+\end{environment}
+\end{verbatim}
+
+\noindent You can also create and define your own custom environments. Some environments have parameters (typically optional). Many environments require specific packages to be used, which will be noted if applicable. Also note that although we'll use tabs to assist with clarity, LaTeX is typically insensitive to tabs.
+
+\subsection{Packages}
+
+To start, consider using these packages:
+\begin{verbatim}
+\usepackage{graphicx}
+\usepackage[letterpaper, top=0.75in, rmargin=1in, lmargin=1in]{geometry}
+\usepackage[shortlabels]{enumitem}
+\usepackage{soul}
+\usepackage{xcolor}
+\usepackage{lineno}
+\usepackage{url}
+\end{verbatim}
+
+\medskip
+\subsection{Troubleshooting}
+
+\noindent \textbf{TODO}:
+\begin{itemize}
+    \item Different versions of compilation
+    \item hbox over/underflow
+    \item Left quotes
+\end{itemize}
+
+
+\newpage
+\section{Alignment}
+
+\subsection{Line Breaks and Vertical Space}
+
+There are multiple ways to add vertical spacing in LaTeX, but some are considered "poor practice". In many cases choosing the "wrong" one will cause "hbox overfull" warnings, but I don't think it's necessary to worry about when just getting started.
+
+\vspace{\baselineskip} \noindent
+Here are some ways to create vertical space with some quick notes on use:
+\begin{verbatim}
+\par                        Starts a new paragraph on a new line; 
+                            automatically indents the new line. 
+                        
+\\                          Inserts a line break; necessary in some enrivonments but 
+                            not recommended for use in "regular" text
+
+\newline                    Inserts a line break, can't be used for additional whitespace 
+                            May cause errors if there is "no line to end" according to LaTeX
+                        
+\vspace{size}               Adds vertical space of the size specified (see allowed units in ch 1)
+
+\vspace{\baselineskip}      Adds vertical space of the size of "baseline line skip"
+\end{verbatim}
+
+\noindent Note: Leaving empty lines in the text will start a new paragraph, but will not add any additional whitespace. Empty lines are essentially equivalent to using the \textbackslash par command.
+
+\vspace{\baselineskip} \noindent
+I would recommend using new paragraphs "functionally" when a new paragraph is started and using \textbackslash vspace for "stylistic" line separation. Use \textbackslash \textbackslash when inside of a tabbing/tabular environment (covered later this section).
+
+\vspace{\baselineskip} \noindent
+Additional information:
+
+\vspace{\baselineskip} \noindent
+\url{https://www.overleaf.com/learn/latex/Paragraphs_and_new_lines}
+
+\noindent \url{https://www.overleaf.com/learn/latex/Line_breaks_and_blank_spaces}
+
+\vspace{\baselineskip} \par \noindent \hl{TODO: setspace package}
+
+\subsection{Tabbing}
+
+\noindent The environment \textit{tabbing} can be used to align text. Note that the \textbf{tabbing} environment is \textbf{not} the same as the \textbf{tabular} environment. The tabbing environment is for creating sections of aligned text, while the tabular environment is for creating tables. This is covered in ?
+
+\vspace{\baselineskip} \par \noindent Below is a small example of the tabbing environment. The first line determines the placement of the tabs and the following text is what's actually displayed. Within the tabular environment, use \textbackslash \textbackslash for line breaks.
+
+\medskip
+\inputflag
+\begin{verbatim}
+\begin{tabbing}
+    \hspace{1in} \= \hspace{1.5in} \= \kill         % \= Define the tab size(s)
+    First \> This is my description \\              % \\ breaks the line
+    More \> This is even \> more description \\     % \> adds a tab
+    \> \> This is extra tabbed
+\end{tabbing}
+\end{verbatim}
+
+\outputflag
+\begin{tabbing}
+    \hspace{1in} \= \hspace{1.5in} \= \kill         % \= Define the tab size(s)
+    First \> This is my description \\               % \\ breaks the line
+    More \> This is even \> more description \\     % \> adds a tab
+    \> \> This is extra tabbed
+\end{tabbing}
+
+\subsection{Centering}
+
+\inputflag
+%\noindent \rule{6in}{1pt}
+\begin{verbatim}
+\begin{center}
+This will be centered.
+
+And this line will also be centered
+\end{center}
+\end{verbatim}
+
+\outputflag
+\begin{center}
+This will be centered.
+
+And this line will also be centered
+\end{center}
+%\noindent \rule{6in}{1pt}
+
+\newpage
+\section{References and Line Numbers}
+
+\subsection[Labels and References]
+\noindent One of the most useful features of LaTeX is its ability to handle references to other parts of the text. Creating a label for part of the text and referencing the label will maintain consistency even if other parts of the text are changed. For example:
+
+\medskip
+\inputflag
+\begin{verbatim}
+\subsection{Basic Styling}
+\label{subsection:basic-styles}
+...
+As discussed in Section \ref{subsection:basic-styles}, 
+we can extend this to...
+\end{verbatim}
+
+\outputflag
+
+As discussed in Section \ref{subsection:basic-styles}, 
+we can extend this to...
+
+\medskip \par \noindent If additional sections are added before Section \ref{subsection:basic-styles} or the title of the section is changed, the reference will update and remain correct. This is very useful for coordinating any references within the text. For PDF generation of legal documents, this is particularly useful for tracking line numbers
+
+\subsection{Line Numbering}
+
+We can use the \textbf{lineno} package to automatically create numbered lines and then reference them later. For example:
+\vspace{\baselineskip}
+
+\inputflag
+\begin{verbatim}
+\begin{linenumbers}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempor, erat in
+eleifend convallis, nulla neque semper magna, id aliquam risus ex posuere lectus.
+Curabitur tincidunt enim sit amet purus aliquet tempor. Vestibulum ac sem aliquet,
+congue diam a, pretium nibh. \linelabel{important-line} \hl{Aliquam sodales 
+tincidunt ligula non varius.} Donec vestibulum sodales maximus. Integer lacinia, 
+quam in consequat ultricies, sem leo pellentesque elit, eget porta eros risus id 
+nulla. Fusce at sodales neque, eget aliquet velit. Duis non finibus ex.
+
+Curabitur ligula nisi, convallis at ante sit amet, tristique hendrerit felis. Fusce
+viverra dui id tellus rhoncus dignissim. Etiam pretium elit vel sem sagittis, id 
+sollicitudin justo lobortis. Vestibulum ultrices maximus quam vitae pellentesque,
+\textbf{as described on line \ref{important-line}}.
+\end{linenumbers}
+\end{verbatim}
+
+\outputflag
+
+\begin{linenumbers}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempor, erat in eleifend convallis, nulla neque semper magna, id aliquam risus ex posuere lectus. Curabitur tincidunt enim sit amet purus aliquet tempor. Vestibulum ac sem aliquet, congue diam a, pretium nibh. \linelabel{important-line} \hl{Aliquam sodales tincidunt ligula non varius.} Donec vestibulum sodales maximus. Integer lacinia, quam in consequat ultricies, sem leo pellentesque elit, eget porta eros risus id nulla. Fusce at sodales neque, eget aliquet velit. Duis non finibus ex.
+
+Curabitur ligula nisi, convallis at ante sit amet, tristique hendrerit felis. Fusce viverra dui id tellus rhoncus dignissim. Etiam pretium elit vel sem sagittis, id sollicitudin justo lobortis. Vestibulum ultrices maximus quam vitae pellentesque, \textbf{as described on line \ref{important-line}}.
+\end{linenumbers}
+
+\vspace{\baselineskip}
+\noindent If we increase the font size, the line numbering will change but the reference will remain consistent. Note that the same label should not be used twice in the same document, but it can be referenced multiple times. Line numbers will increment over the course of the entire document unless reset.
+\vspace{\baselineskip}
+
+\inputflag
+
+\begin{verbatim}
+\begin{linenumbers}
+\Large
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempor, erat in 
+eleifend convallis, nulla neque semper magna, id aliquam risus ex posuere lectus.
+Curabitur tincidunt enim sit amet purus aliquet tempor. Vestibulum ac sem aliquet,
+congue diam a, pretium nibh. \linelabel{important-line} \hl{Aliquam sodales
+tincidunt ligula non varius.} Donec vestibulum sodales maximus. Integer lacinia, 
+quam in consequat ultricies, sem leo pellentesque elit, eget porta eros risus id 
+nulla. Fusce at sodales neque, eget aliquet velit. Duis non finibus ex.
+
+Curabitur ligula nisi, convallis at ante sit amet, tristique hendrerit felis. Fusce
+viverra dui id tellus rhoncus dignissim. Etiam pretium elit vel sem sagittis, id 
+sollicitudin justo lobortis. Vestibulum ultrices maximus quam vitae pellentesque, 
+\textbf{as described on line \ref{important-line}}.
+\end{linenumbers}
+\end{verbatim}
+
+\outputflag
+
+\resetlinenumber % need to reset since examples are in same doc
+\begin{linenumbers}
+\Large
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempor, erat in eleifend convallis, nulla neque semper magna, id aliquam risus ex posuere lectus. Curabitur tincidunt enim sit amet purus aliquet tempor. Vestibulum ac sem aliquet, congue diam a, pretium nibh. \linelabel{another-important-line} \hl{Aliquam sodales tincidunt ligula non varius.} Donec vestibulum sodales maximus. Integer lacinia, quam in consequat ultricies, sem leo pellentesque elit, eget porta eros risus id nulla. Fusce at sodales neque, eget aliquet velit. Duis non finibus ex.
+
+Curabitur ligula nisi, convallis at ante sit amet, tristique hendrerit felis. Fusce viverra dui id tellus rhoncus dignissim. Etiam pretium elit vel sem sagittis, id sollicitudin justo lobortis. Vestibulum ultrices maximus quam vitae pellentesque, \textbf{as described on line \ref{another-important-line}}.
+\end{linenumbers}
+
+\newpage
+\section{Lists}
+
+\subsection{Itemize}
+\noindent The environment \textit{itemize} can be used to make bulleted lists:
+
+\medskip
+\inputflag
+\begin{verbatim}
+\begin{itemize}
+    \item My first point
+    \item My second point
+\end{itemize}
+\end{verbatim}
+
+\outputflag
+\begin{itemize}
+    \item My first point
+    \item My second point
+\end{itemize}
+
+\subsection{Customized lists}
+
+Requires \textbf{\textbackslash usepackage[shortlabels]\{enumitem\}}
+
+\medskip
+\inputflag
+\begin{verbatim}
+\begin{enumerate}[label*=\arabic*]
+    \item First is here
+        \begin{enumerate}[label*=\alph*]
+        \item We can label sub-items with letters
+        \end{enumerate}
+    \item Second is here
+        \begin{enumerate}[label*=.\arabic*]
+        \item Or we can label sub-items with numbers
+        \end{enumerate}
+    \item Third is here
+\end{enumerate}
+\end{verbatim}
+
+\outputflag
+\begin{enumerate}[label*=\arabic*]
+    \item First is here
+        \begin{enumerate}[label*=\alph*]
+        \item We can label sub-items with letters
+        \end{enumerate}
+    \item Second is here
+        \begin{enumerate}[label*=.\arabic*]
+        \item Or we can label sub-items with numbers
+        \end{enumerate}
+    \item Third is here
+\end{enumerate}
+
+\newpage
+\section{Tables}
+
+\noindent Tables are simple to make, but can be challenging to format precisely. Multiple packages exist that may be used for table creation. Creating a table typically uses either the \textbf{tabular} package or the \textbf{tabularx} package. A table may or may not use the \textbf{table} environment. We'll be starting with only \textbf{tabular}.
+
+\subsection{Simple Tables}
+For a very simple table, we need to specify the type of column to use and whether or not to include vertical rules. The contents of each cell are separated by \& within a row and \textbackslash \textbackslash  for a column. Horizontal rules are denoted by \textbackslash hline. It's also generally recommended to center tables. Here's a simple example: 
+
+\vspace{\baselineskip}
+\inputflag
+
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | c | c c c |} % defines columns and vertical rules
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & G & H \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+
+\setlength\extrarowheight{0pt}
+\begin{center}
+    \begin{tabular}{ | c | c c c |}
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & G & H \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\vspace{\baselineskip} \noindent The default row padding is more narrow than I prefer. I add the following command at the top of my document to add a bit of extra spacing:
+\begin{verbatim}
+\setlength\extrarowheight{4pt}
+\end{verbatim}
+
+\setlength\extrarowheight{4pt}
+
+\outputflag
+
+\begin{center}
+    \begin{tabular}{ | c | c c c |}
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & G & H \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\subsection{Column Options}
+
+Standard column types:
+\begin{verbatim}
+c               centred column
+l               left-justified column
+r               right-justified column
+p{width}        paragraph column with text vertically aligned at the top
+m{width}        paragraph column with text vertically aligned in the middle (req array package)
+b{width}        paragraph column with text vertically aligned at the bottom (req array package)
+\end{verbatim}
+
+% X               calculated to p{width}; tabularx only
+
+\noindent You can also create your own custom columns. This one creates a left-aligned column of a custom width:
+
+\begin{verbatim}
+\newcolumntype{F}[1]{>{\raggedright\arraybackslash}p{#1}}
+\end{verbatim}
+
+The [1] indicates the number of parameters, and \#1 indicates where the first parameter will be inserted. \textbackslash raggedright makes the column left-aligned, and \textbackslash \arraybackslash is needed on the last column to prevent errors (?). Here's an example:
+
+\vspace{\baselineskip}
+\inputflag
+
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | F{1.5in} | F{1in} | F{0.5in}   F{0.5in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        \hline
+        E & F & G & H \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+
+\begin{center}
+    \begin{tabular}{ | F{1.5in} | F{1in} | F{0.5in}   F{0.5in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        \hline
+        E & F & G & H \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\noindent The text will also wrap by default for this type of column:
+\begin{center}
+    \begin{tabular}{ | F{1.5in} | F{1in} | F{0.5in}   F{0.5in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        Here is some text. There's so much text that it needs to wrap! But it will wrap instead of running into another column. & B & C & D \\
+        \hline
+        E & F & G & H \\
+        \hline
+    \end{tabular}
+\end{center}\
+
+\noindent You can also use the \textbf{multirow} package to combine columns and rows. The function \textbackslash multicolumn takes three parameters: the number of columns to span, the column style to use for the merged column (including vertical rules), and the text of the column. Here's an example of the multicolumn package:
+
+\vspace{\baselineskip}
+\inputflag
+
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | c | c c c |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{c|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|c|}{Any of I, J, or K}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+
+\begin{center}
+    \begin{tabular}{ | c | c c c |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{c|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|c|}{Any of I, J, or K}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\noindent \textbf{Be careful when combining multicolumn with fixed-width columns}. Combining multicolumn with fixed-width columns can cause some odd behavior because of the way table sizing works in LaTeX, which will be discussed later in this section.
+
+\subsection{Table Sizing: Issues}
+
+One of the most frustrating aspects of LaTeX can be making tables or columns \textit{exactly} the size that you want them. This subsection explains the details of why table sizing may not behave as expected in LaTeX, while the next one outlines a solution. Feel free to skip to there, but consider at least skimming this section. 
+
+LaTeX tables may behave in unexpected ways because fixed-width columns only set the width of the text in the column, and does not include the default padding on each column. The size of the padding between the text and the borders of the cell is referred to as \textbackslash tabcolsep. This means that changing the number of columns will change the total width of your table even if the sum of the column widths is unchanged.
+
+\vspace{\baselineskip}
+\noindent \textbf{For a fixed-width column p\{x\}, the actual width of the column will be x + 2 * \textbackslash tabcolsep}
+
+\vspace{\baselineskip}
+\noindent Here's an example of how this can cause unexpected behavior:
+
+\vspace{\baselineskip}
+\inputflag
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | p{1.5in} | p{1in} | p{0.5in}   p{0.5in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{ | p{1.5in} | p{1in} | p{1in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} \\
+        \hline
+        A & B & C \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+\begin{center}
+    \begin{tabular}{ | p{1.5in} | p{1in} | p{0.5in}   p{0.5in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{ | p{1.5in} | p{1in} | p{1in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} \\
+        \hline
+        A & B & C \\
+        \hline
+    \end{tabular}
+\end{center}
+
+You might expect these tables to be the same width, but they're not, despite the column widths summing to 4.5in for both. The width of the first table is actually 4.5in + 4(2 * \textbackslash tabcolsep), while the width of the second table is only 4.5in + 3(2 * \textbackslash tabcolsep). The default value of \textbackslash tabcolsep is 6pt, which is 0.0833... inches. I personally prefer to set it to 0.08in to make any column math easier, since we may want to keep sizes consistent. If we add 0.16in to the third column in our second table, it should now match the first:
+
+\vspace{\baselineskip}
+\inputflag
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | p{1.5in} | p{1in} | p{1.16in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} \\
+        \hline
+        A & B & C \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+\begin{center}
+    \begin{tabular}{ | p{1.5in} | p{1in} | p{1.16in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} \\
+        \hline
+        A & B & C \\
+        \hline
+    \end{tabular}
+\end{center}
+
+
+This is also why multicolumn can cause unexpected behavior with fixed rows. Consider our example from before if we had some longer text:
+
+\begin{center}
+    \begin{tabular}{ | F{0.5in} | F{0.5in} F{0.5in} F{0.5in} |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{c|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|c|}{Any of I, J, or K, or also some other options, there are a lot of possibilities}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+
+Because our multicolumn command used column type \textit{c}, the column text width is no longer fixed and the table expands to accommodate the text. We can try F\{1.5in\} in place of \textit{c}, but this still gives us some odd behavior.
+
+\inputflag
+
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | F{0.5in} | F{0.5in} F{0.5in} F{0.5in} |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{c|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|F{1.5in}|}{Any of I, J, or K, or also some other options, there are a lot of possibilities}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+
+\begin{center}
+    \begin{tabular}{ | F{0.5in} | F{0.5in} F{0.5in} F{0.5in} |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{c|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|F{1.5in}|}{Any of I, J, or K, or also some other options, there are a lot of possibilities}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+
+Now it's wrapped, but the text doesn't fill the cell because the first three columns actually have a width of 1.5in + 3(2 * 0.08in) = 1.98in. For a single column with a total width of 1.98in, the text width is 1.98 - 2(0.08) = 1.82in. So our table should actually look like:
+
+\vspace{\baselineskip}
+\inputflag
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | F{0.5in} | F{0.5in} F{0.5in} F{0.5in} |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{c|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|F{1.82in}|}{Any of I, J, or K, or also some other
+        options, there are a lot of possibilities}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+\begin{center}
+    \begin{tabular}{ | F{0.5in} | F{0.5in} F{0.5in} F{0.5in} |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{c|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|F{1.82in}|}{Any of I, J, or K, or also some other options, there are a lot of possibilities}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+
+%To generalize this, let $W_{i}$ represent the text width of column $i$ and let $t =$ \textbackslash tabcolsep. The text width for a multicolumn that spans columns $i$ through $i+k$ is then:
+%$$ 2kt + \sum_{i}^{i+k} W_{i} $$
+
+%If we apply this to our previous example of columns 1 through 3 we get:
+%$$ 4t + (0.5 + 0.5 + 0.5) = 1.82 $$
+
+
+\subsection{Table Sizing: Solutions}
+
+In order to keep a consistent width among tables and for correct multicolumn handling, I recommend defining the following column type: (Note that this requires the \textbf{calc} package)
+\begin{verbatim}
+\newcolumntype{A}[1]{>{\raggedright\arraybackslash}p{#1 - 2\tabcolsep}}
+\end{verbatim}
+
+
+This will create a column with a \textit{total} size of the input. This allows us to simply sum the values for tables with different numbers of columns that should have the same total width.
+
+\vspace{\baselineskip}
+\inputflag
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | A{1.5in} | A{1in} | A{0.75in}   A{0.75in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{ | A{1.5in} | A{1in} | A{1.5in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} \\
+        \hline
+        A & B & C \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\outputflag
+\begin{center}
+    \begin{tabular}{ | A{1.5in} | A{1in} | A{0.75in}   A{0.75in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{ | A{1.5in} | A{1in} | A{1.5in} | }
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} \\
+        \hline
+        A & B & C \\
+        \hline
+    \end{tabular}
+\end{center}
+
+This also simplifies multicolumn handling:
+
+\vspace{\baselineskip}
+\inputflag
+\begin{verbatim}
+\begin{center}
+    \begin{tabular}{ | A{0.75in} | A{0.75in} A{0.75in} A{0.75in} |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{A{1.5in}|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|A{2.25in}|}{Any of I, J, or K, or also some other
+        options, there are a lot of possibilities}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{verbatim}
+
+\begin{center}
+    \begin{tabular}{ | A{0.75in} | A{0.75in} A{0.75in} A{0.75in} |}
+        \hline
+        \multicolumn{4}{|c|}{The title of my table} \\
+        \hline
+        \textbf{First} & \textbf{Second} & \textbf{Third} & \textbf{Fourth} \\
+        \hline
+        A & B & C & D \\
+        E & F & \multicolumn{2}{A{1.5in}|}{Either G or H} \\
+        \hline
+        \multicolumn{3}{|A{2.25in}|}{Any of I, J, or K, or also some other options, there are a lot of possibilities}  & L \\
+        \hline
+    \end{tabular}
+\end{center}
+
+
+
+\subsection{The table environment}
+TODO, but in summary: it's not needed and can cause unexpected behavior due to LaTeX trying to place your table ``nicely"
+
+\newpage
+\section{Page Layout}
+
+\subsection{Geometry package}
+The \textbf{geometry} package can be used to set the page layout. For this document, we're using:
+\begin{verbatim}
+\usepackage[letterpaper, top=0.75in, rmargin=1in, lmargin=1in]{geometry}
+\end{verbatim}
+
+\subsection{Headers and footers}
+
+\newpage
+\section{Advanced}
+
+\subsection{Custom commands}
+\subsection{Constant variables}
+\subsection{If/then}
+\subsection{Iterating}
+\subsection{Special Characters}
+\begin{verbatim}
+\           Begins a command
+%           Comment out line
+{}          Parameters for commands
+[]          Brackets may indicate parameters but do not typically need to be escaped
+&           Delimiter for alignment
+$..$        Indicates that the contents are in "math mode"
+\\          Line break
+#           TODO
+@           TODO
+_           TODO
+^           TODO
+~           TODO
+*           TODO
+http://www.emerson.emory.edu/services/latex/latex_toc.html#SEC155
+\end{verbatim}
+
+\subsection{Imports and inputs}
+\subsection{Different versions of TeX}
+
+
+
+\end{document}
