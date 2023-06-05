@@ -63,7 +63,7 @@ The content of my document...
 &           Delimiter for alignment
 $..$        Indicates that the contents (between $) are in "math mode"
 \\          Line break
-*           TODO commands that are similar to other commands with slight changes
+*           TODO, environments that are similar to other commands with slight changes
 \end{verbatim}
 
 \subsection{Basic Styling}
@@ -126,15 +126,18 @@ An image can be included with the \textbf{graphicx} package and the file name (o
 
 \subsection{Packages}
 
-To start, consider using these packages:
+To start, consider using this as your preamble:
 \begin{verbatim}
-\usepackage{graphicx}
+\usepackage{graphicx} % Required for inserting images
 \usepackage[letterpaper, top=0.75in, rmargin=1in, lmargin=1in]{geometry}
-\usepackage[shortlabels]{enumitem}
+\usepackage[shortlabels]{enumitem} % for making customized lists
 \usepackage{soul}
 \usepackage{xcolor}
 \usepackage{lineno}
 \usepackage{url}
+\usepackage{setspace}
+\usepackage{array}
+\usepackage{calc}
 \end{verbatim}
 
 \medskip
@@ -343,7 +346,9 @@ Curabitur ligula nisi, convallis at ante sit amet, tristique hendrerit felis. Fu
 
 \subsection{Customized lists}
 
-Requires \textbf{\textbackslash usepackage[shortlabels]\{enumitem\}}
+\noindent \hl{TODO}
+
+\noindent Requires \textbf{\textbackslash usepackage[shortlabels]\{enumitem\}}
 
 \medskip
 \inputflag
@@ -819,10 +824,10 @@ This also simplifies multicolumn handling:
 
 
 \subsection{The table environment}
-TODO, but in summary: it's not needed and can cause unexpected behavior due to LaTeX trying to place your table ``nicely"
+TODO, but in summary: it's not needed and can cause unexpected behavior due to LaTeX handling your table as a float and trying to place it ``nicely"
 
 \newpage
-\section{Page Layout}
+\section{Page Layout: TODO}
 
 \subsection{Geometry package}
 The \textbf{geometry} package can be used to set the page layout. For this document, we're using:
@@ -831,15 +836,25 @@ The \textbf{geometry} package can be used to set the page layout. For this docum
 \end{verbatim}
 
 \subsection{Headers and footers}
+Packages \textbf{fancyhdr} and \textbf{extramarks}
 
 \newpage
-\section{Advanced}
+\section{Misc: TODO}
 
 \subsection{Custom commands}
+Includes if/then and iterating
+
 \subsection{Constant variables}
-\subsection{If/then}
-\subsection{Iterating}
+
+\subsection{Inputs vs imports}
+
+\subsection{Fonts}
+
+
+\section{Compilation Details: TODO}
+
 \subsection{Special Characters}
+\noindent Which characters need to be escaped and how to escape them
 \begin{verbatim}
 \           Begins a command
 %           Comment out line
@@ -857,9 +872,10 @@ _           TODO
 http://www.emerson.emory.edu/services/latex/latex_toc.html#SEC155
 \end{verbatim}
 
-\subsection{Imports and inputs}
 \subsection{Different versions of TeX}
 
+\subsection{Troubleshooting}
+Paths, number of times it needs to run so that references work, etc
 
 
 \end{document}
