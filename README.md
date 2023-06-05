@@ -1,20 +1,15 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+This is an example project to introduce the LaTeX and Nunjucks stack 
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+TODO: Guide users through getting your code up and running on their own system
+- Clone the repo
+- Install node modules
+- To compile TS to JS, use *npm run build*
+- To run the application, use *npm run start*
+- If the LaTeX/Nunjucks has been changed but the TS has not changed, it's not necessary to run *build* again to regenerate a PDF
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Notes
+- You must have the compiler and packages installed on your system (for the solutions-dv-vm, this should already be done)
+- I highly recommend **not** using latex-workshop. It makes a number of assumptions which can be helpful initially, but can also cause errors and will *not* necessarily return the same output as the coded web application
+- This does not use nodemon and I don't recommend using it because this can cause unintended overwriting of PDFs and generation of corrupted PDFs

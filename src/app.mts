@@ -24,7 +24,7 @@ const testData = {"Name": "YOURNAME", "Pets": Pets, "CoverageData": CoverageData
 
 
 // Example 1: Using LaTeX
-//TexToPDF('Example1/Hanover.tex', 'HanoverDemo.pdf', 'shared')
+//TexToPDF('Example1/demo.tex', 'HanoverDemo.pdf', 'shared')
 
 // Example 2: Basic Nunjucks
 //NjkToPDF('Example2/main.njk', 'PetNews.pdf', testData)
