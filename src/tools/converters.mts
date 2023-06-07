@@ -79,7 +79,7 @@ function NjkToPDF(input_file: string, output_name: string, data: any, config: an
         TexTest.write(input);
     }
 
-    const extra_path = config.extra_path ||  path.resolve('projects', path.dirname(input_file))
+    const extra_path = config.extra_path ||  path.resolve(nj_dir, path.dirname(input_file))
     compilePDF(input, path.join(pdf_path, output_name), setOptions({extra_path: extra_path}))
 }
 
