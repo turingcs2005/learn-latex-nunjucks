@@ -3,32 +3,30 @@ import { CoverageData, Pets} from './test-data.mjs'
 import fs from 'fs';
 import path from "path";
 
-const testData = {"Name": "YOURNAME", "Pets": Pets, "CoverageData": CoverageData}
 
 /* Functions:
-    RenderNjk(projectdir/file.njk, data[as object])
+    RenderNjk(file.njk, data[as object])
         Returns string output of Nunjucks rendering
 
-    TexToPDF(inputname.tex, outputname.pdf, data[as object])
-        Searches for input in tex-files dir
+    TexToPDF(inputname.tex, outputname.pdf)
 
-    NjkToPDF(projectdir/file.njk, outputname.pdf, data[as object], save_tex=false)
-        Saves output to pdf dir, option to also save tex
+    NjkToPDF(file.njk, outputname.pdf, data[as object], config[as object, optional])
+        Compiles to PDF, option to also save tex if config {save_tex: true}
 
-    NjkToTex(projectdir/file.njk, outputname.tex)
-        Saves output to tex-files dir
+    NjkToTex(file.njk, outputname.tex, data[as object])
 
-    consolidateTex(inputname.tex, outputname.tex, relevantdirectory)
-        Copies in text from preamble/sections into a single tex document
+    consolidateTex(inputname.tex, outputname.tex, refdir)
+        Copies in any \input references into a single tex doc, \inputs should be rel to ref directory
 */
 
+const testData = {"Name": "Rick", "Pets": Pets, "CoverageData": CoverageData}
 
 // Example 1: Using LaTeX
-//TexToPDF('Example1/demo.tex', 'HanoverDemo.pdf', 'shared')
+//TexToPDF('Example1/demo.tex', 'demo.pdf')
 
 // Example 2: Basic Nunjucks
 //NjkToPDF('Example2/main.njk', 'PetNews.pdf', testData)
 
 // Example 3: Project Structure
-//NjkToPDF('Example3/main.njk', 'Table.pdf', testData, true) // Nunjucks to Tex, helpful for debugging
-//consolidateTex('Table.tex', 'consolTable.tex', 'Example3') // Pastes in input sections. needs directory
+//NjkToPDF('Example3/main.njk', 'MyTable.pdf', testData, {save_tex: true}) // Saves intermediate tex file, helpful for debugging
+//consolidateTex('MyTable.tex', 'Example3Consol.tex', 'projects/Example3') // Pastes in input sections. needs directory

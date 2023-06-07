@@ -6,10 +6,10 @@
 \begin{center}
 \begin{tabular}{ | A{0.3\GenericTbWidth} | A{0.25\GenericTbWidth} | A{0.2\GenericTbWidth} | A{0.1\GenericTbWidth} | A{0.15\GenericTbWidth} | }
     \hline
-    \textbf{#!KeyCol!#} [## for eachcol in OtherCols ##] & \textbf{#!eachcol!#} [## endfor ##] \\
+    \textbf{#!KeyCol|texscape!#} [## for eachcol in OtherCols ##] & \textbf{#!eachcol|texscape!#} [## endfor ##] \\
     \hline
     [## for key, attrs in MyData ##]
-    \textbf{#!key!#} [## for eachcol in OtherCols ##] & #!attrs[eachcol]|safe!# [## endfor ##] \\
+    \textbf{#!key|texscape!#} [## for eachcol in OtherCols ##] & #!attrs[eachcol]|texscape!# [## endfor ##] \\
     \hline
     [## endfor ##]
 \end{tabular}

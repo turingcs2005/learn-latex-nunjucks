@@ -3,10 +3,16 @@
 import path from 'path';
 import fs from 'fs';
 import nunjucks from "nunjucks";
-import latex from "./node-latex.mjs"
+import latex from "./new-node-latex.mjs"
+import {nj_dir, tex_dir, pdf_dir, shared_dir} from "../config.mjs"
 
-const env = nunjucks.configure('projects', {
-    autoescape: true,
+const pdf_path = path.resolve(pdf_dir)
+const tex_path = path.resolve(tex_dir)
+const shared_path = path.resolve(shared_dir)
+
+
+const env = nunjucks.configure(nj_dir, {
+    autoescape: false,
     tags: {
         variableStart: '#!',
         variableEnd: '!#',
@@ -17,17 +23,32 @@ const env = nunjucks.configure('projects', {
     }
 });
 
-function setOptions(ref_dir: string) {
+env.addFilter('texscape', function(str) {
+    const fixslash = str.replace(/\\/g, "\\textbackslash");
+    const fixsymbols = fixslash.replace(/(\$|%|&|#|_|\{|\})/g, "\\$1"); // replace tex special characters
+    const fixspecial = fixsymbols.replace(/(\^|~)/g, "\\$1\{\}") // replace tex special characters with a different replacement syntax
+    return fixspecial;
+});
+
+function setOptions(config: any = null) {
+    config = config || {}
+    const input_paths = [shared_path]
+    if (config.extra_path) {
+        const new_path = path.resolve(config.extra_path)
+        input_paths.push(new_path)
+    }
+
     const myOptions = {
         passes: 2,
-        inputs: [path.resolve('shared'), path.resolve('projects', ref_dir)]
-      };
+        inputs: input_paths
+    };
+
     return myOptions
 }
 
 // Compiles the .tex files CONTENTS (as a STRING) to create the PDF
-function compilePDF(input: string, output_file_path: string, options: any) {
-    const output = fs.createWriteStream(output_file_path);
+function compilePDF(input: string, output_file: string, options: any) {
+    const output = fs.createWriteStream(output_file);
     const pdf = latex(input, options);
     pdf.pipe(output);
     pdf.on('error', (err: any) => console.error(err));
@@ -35,10 +56,10 @@ function compilePDF(input: string, output_file_path: string, options: any) {
 }
 
 // Returns just the .tex file output from Nunjucks
-// input path relative to nunjucks configuration path ('/views')
-function NjkToTex(input_path: string, output_name: string, data: any) {
-    const input = nunjucks.render(input_path, data);
-    let TexTest = fs.createWriteStream(path.resolve("tex-files", output_name))
+// input file relative to nunjucks configuration path
+function NjkToTex(input_file: string, output_name: string, data: any) {
+    const input = nunjucks.render(input_file, data);
+    let TexTest = fs.createWriteStream(path.join(tex_path, output_name))
     TexTest.write(input);
 }
 
@@ -47,42 +68,46 @@ function RenderNjk(input_path: string, data: any) {
 }
 
 // Takes the nunjucks file, applies nunjucks functions and logic, and then returns corresponding PDF
-// input path relative to nunjucks configuration path ('/views')
-// optional parameter to save the .tex file to the TexTests folder
-function NjkToPDF(input_path: string, output_name: string, data: any, save_tex = false) {
-    const input = nunjucks.render(input_path, data);
-    if (save_tex) {
+// input path relative to nunjucks configuration path
+function NjkToPDF(input_file: string, output_name: string, data: any, config: any = null) {
+    config = config || {}
+    const input = nunjucks.render(input_file, data);
+
+    if (config.save_tex) {
         const tex_name = output_name.replace(/([\w]*)\.pdf/g, '$1' + '.tex');
-        let TexTest = fs.createWriteStream(path.resolve("tex-files", tex_name));
+        let TexTest = fs.createWriteStream(path.join(tex_path, tex_name));
         TexTest.write(input);
     }
-    const ref_direct = input_path.split("/")[0];
-    compilePDF(input, path.resolve("pdf", output_name), setOptions(ref_direct));
+
+    const extra_path = config.extra_path ||  path.resolve('projects', path.dirname(input_file))
+    compilePDF(input, path.join(pdf_path, output_name), setOptions({extra_path: extra_path}))
 }
 
 // reads in a .tex file and returns contents as a string
-function TexToString(file_path: string, file_name: string) {
-    return fs.readFileSync(path.resolve(file_path, file_name), 'utf8')
+function TexToString(file_name: string, file_dir = tex_path) {
+    const exact_path = path.resolve(file_dir, file_name)
+    return fs.readFileSync(exact_path, 'utf8')
 }
 
 // Compiles a .tex file
-function TexToPDF(input_name: string, output_name: string, ref_dir: string) {
-    const input = TexToString("tex-files", input_name)
-    compilePDF(input, path.resolve("pdf", output_name), setOptions(ref_dir))
+function TexToPDF(input_name: string, output_name: string, config: any = null) {
+    const input = TexToString(input_name)
+    compilePDF(input, path.join(pdf_path, output_name), setOptions(config))
 } 
 
 
 // function input needs to be the .tex contents as a string, not the file name
 function consolidateTexHelper(input: string, ref_dir: string) {
-    return input.replace(/\\input{([\w\/.]+)}/g, (match, p1) => TexToString(ref_dir, p1));
+    return input.replace(/\\input{([\w\/.]+)}/g, (match, p1) => TexToString(p1, ref_dir));
 }
 
 // Takes a tex file and inserts all \input{filepath} text files, filepath should be relative to ref_dir
 function consolidateTex(input_name: string, output_name: string, ref_dir: string) {
-    const asString = TexToString("tex-files", input_name);
-    const newString = consolidateTexHelper(asString, path.join('projects',ref_dir));
-    let consolidated = fs.createWriteStream(path.resolve("tex-files", output_name));
+    const asString = TexToString(input_name);
+    const newString = consolidateTexHelper(asString, ref_dir);
+    let consolidated = fs.createWriteStream(path.join(tex_path, output_name));
     consolidated.write(newString);
+    return newString
 }
 
-export { NjkToTex, NjkToPDF, TexToPDF, consolidateTex, RenderNjk}
+export { NjkToTex, NjkToPDF, TexToPDF, consolidateTex, RenderNjk, TexToString}

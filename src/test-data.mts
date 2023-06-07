@@ -30,49 +30,49 @@ const Pets = {
 
 const CoverageData = {
     "A. Hull": 
-        {Deductible: "\\$900", 
-        "Amounts or Limits": "\\$750,000", 
+        {Deductible: "$900", 
+        "Amounts or Limits": "$750,000", 
         Rate: "0", 
-        Premium: "\\$7,714"}, 
+        Premium: "$7,714"}, 
     "B. Protection and Indemnity": 
         {Deductible: "See Schedule", 
-        "Amounts or Limits": "\\$300,000", 
+        "Amounts or Limits": "$300,000", 
         Rate: "0", 
-        Premium: "\\$779"}, 
+        Premium: "$779"}, 
     "C. Tender": 
-        {Deductible: "\\$400", 
-        "Amounts or Limits": "\\$3,500", 
+        {Deductible: "$400", 
+        "Amounts or Limits": "$3,500", 
         Rate: "0", 
-        Premium: "\\$100"}, 
+        Premium: "$100"}, 
     "D. Breach of Warranty": 
         {Deductible: "N/A", 
-        "Amounts or Limits": "\\$25,000", 
+        "Amounts or Limits": "$25,000", 
         Rate: "0", 
-        Premium: "\\$27"}, 
+        Premium: "$27"}, 
     "E. WQIS (Vessel Pollution)": 
         {Deductible: "N/A", 
-        "Amounts or Limits": "\\$300,000", 
+        "Amounts or Limits": "$300,000", 
         Rate: "0", 
         Premium: "0"}, 
     "F. Terrorism": 
         {Deductible: "N/A", 
-        "Amounts or Limits": "\\$750,000", 
+        "Amounts or Limits": "$750,000", 
         Rate: "0", 
         Premium: "0"}};
     
-    const VesselsData = {
+const VesselsData = {
     "2012 Viking 35": 
-        {"Hull Limit": "\\$750,000", 
-        "Protection \\& Indemnity Limit": "\\$300,000", 
-        "Hull Deductible": "\\$900", 
-        "P \\& I Deductible": "\\$500 BI / \\$1000 PD"},
+        {"Hull Limit": "$750,000", 
+        "Protection & Indemnity Limit": "$300,000", 
+        "Hull Deductible": "$900", 
+        "P & I Deductible": "$500 BI / $1000 PD"},
     "Second Vessel": 
-        {"Hull Limit": "\\$750,000", 
-        "Protection \\& Indemnity Limit": "\\$300,000", 
-        "Hull Deductible": "\\$900", 
-        "P \\& I Deductible": "\\$500 BI / \\$1000 PD"}} 
+        {"Hull Limit": "$750,000", 
+        "Protection & Indemnity Limit": "$300,000", 
+        "Hull Deductible": "$900", 
+        "P & I Deductible": "$500 BI / $1000 PD"}} 
     
 
-    const smallData = {Name: 'Lindsey', Height: '0.6in', Pets: Pets, CoverageData: CoverageData}
-
 export { CoverageData, Pets }
+
+//const testString = "These symbols should all work because they're being escaped ~. You can get 50% off, & save even more from of the original price of $400. For questions, please call #888 or see our website at my_site.com. Also, see above ^"
