@@ -18,8 +18,10 @@ function resolvePaths(paths: any) {
     return path.resolve(paths)
 }
 
-function newLatex(input: string, config: any) {
+function newLatex(input_file: string, config: any) {
 
+    const input = TexToString(input_file);
+    
     const joinPaths = (inputs: any) =>
         (Array.isArray(inputs) ? inputs.join(path.delimiter) : inputs) +
         path.delimiter;
@@ -31,13 +33,55 @@ function newLatex(input: string, config: any) {
         outputStream.destroy()
     }
 
+    const printErrors = (tempPath: any, userLogPath: any = false) => {
+        const errorLogPath = path.join(tempPath, 'texput.log')
+    
+        fs.stat(errorLogPath, (err, stats) => {
+          if (err || !stats.isFile()) {
+            outputStream.emit('error', new Error('No error log file.'))
+            return
+          }
+    
+          const errorLogStream = fs.createReadStream(errorLogPath)
+    
+          if (userLogPath) {
+            const userLogStream = fs.createWriteStream(path.resolve(userLogPath))
+            errorLogStream.pipe(userLogStream)
+            userLogStream.on('error', (userLogStreamErr) => handleErrors(userLogStreamErr))
+          }
+    
+          const errors: any = []
+    
+          errorLogStream.on('data', (data) => {
+            const lines = data.toString().split('\n')
+    
+            lines.forEach((line, i) => {
+              if (line.startsWith('! Undefined control sequence.')) {
+                errors.push(lines[i - 1])
+                errors.push(lines[i])
+                errors.push(lines[i + 1])
+              } else if (line.startsWith('!')) {
+                errors.push(line)
+              }
+            })
+          })
+    
+          errorLogStream.on('end', () => {
+            const errMessage = `LaTeX Syntax Error\n${errors.join('\n')}`
+            const error = new Error(errMessage)
+    
+            outputStream.emit('error', error)
+          })
+        })
+      }
+
     temp.mkdir('node-latex', (err, tempPath) => {
         let inputStream = strToStream(input)
 
         const inputPaths = {
-            TEXINPUTS: joinPaths(resolvePaths(config.input_paths)),
-            TTFONTS: joinPaths(tempPath),
-            OPENTYPEFONTS: joinPaths(tempPath)
+            TEXINPUTS: joinPaths(resolvePaths(config.input_paths))
+            //TTFONTS: joinPaths(tempPath)
+            //OPENTYPEFONTS: joinPaths(tempPath)
         }
 
         const opts = {
@@ -62,6 +106,7 @@ function newLatex(input: string, config: any) {
                 if (code !== 0) {
                     console.log("Error code:")
                     console.log(code)
+                    printErrors(tempPath)
                     return
                 }
                 returnDocument()
