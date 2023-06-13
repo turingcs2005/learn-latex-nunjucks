@@ -106,21 +106,22 @@ function latex(src: string, config: any) {
         outputStream.destroy()
     }
 
+    config = config || {}
+    const cmd = config.cmd || 'lualatex'
+    const userLogPath = config.error_log_path // The path to where the user wants to save the error log file to.
+    const input_paths = config.input_paths || []
+    const font_paths = config.font_paths || []
+    const precompiled_paths = config.precompiled || []
+    const max_passes = config.max_passes || 5
+    const args = config.args || ['-halt-on-error']
+    args.push('-jobname=texput')
+
     temp.mkdir('node-latex', (err, tempPath) => {
         if (err) {
             handleErrors(err)
         }
 
         let inputStream = strToStream(src)
-
-        config = config || {}
-        const cmd = config.cmd || 'lualatex'
-        const userLogPath = config.errorLogs // The path to where the user wants to save the error log file to.
-        const input_paths = config.input_paths || []
-        const font_paths = config.font_paths || []
-        const precompiled_paths = config.precompiled || []
-        const args = config.args || ['-halt-on-error']
-        args.push('-jobname=texput')
 
         const opts = {
             cwd: tempPath,
@@ -151,7 +152,7 @@ function latex(src: string, config: any) {
             tex.stdin.on('error', handleErrors) // Prevent Node from crashing on compilation error.
 
             tex.on('error', () => {
-                handleErrors(new Error(`Error: Unable to run ${config.cmd} command.`))
+                handleErrors(new Error(`Unable to run ${config.cmd} command.`))
             })
 
             let logString: string = ""
@@ -163,7 +164,6 @@ function latex(src: string, config: any) {
             tex.stderr.on('data', (data) => {});
             tex.on('close', (code) => { });
             tex.on('exit', (code) => {
-                
                 if (code !== 0) {
                     const errorLogPath = path.join(tempPath, 'texput.log')
                     printErrors(errorLogPath, userLogPath)
@@ -172,7 +172,7 @@ function latex(src: string, config: any) {
                 
                 completedPasses++
                 const lines = logString.split('\n')
-                runComplete(completedPasses, warningsLog(lines)) ? returnDocument() : runLatex(strToStream(src))
+                runComplete(completedPasses, warningsLog(lines), max_passes) ? returnDocument() : runLatex(strToStream(src))
             })
         }
 
