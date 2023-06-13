@@ -14,7 +14,7 @@ import fs from 'fs';
  * Generates a PDF stream from a LaTeX document.
  *
  * @param {String} src - The LaTeX document.
- * @param {Object} options - Optional compilation specifications.
+ * @param {Object} config - Optional compilation specifications.
  *
  * @return {DestroyableTransform}
  */
@@ -40,7 +40,6 @@ function resolvePaths(paths: string[]) {
     return paths.map(pth => path.resolve(pth))
 }
 
-// TODO currently a stub function! replace with actual function checking if more runs are needed
 function runComplete(num_runs: number, warning_log: string[], max_runs= 3) {
     if (warning_log.length == 0) {
         console.log("Run complete!")
@@ -55,7 +54,6 @@ function runComplete(num_runs: number, warning_log: string[], max_runs= 3) {
     }
 }
 
-
 function warningsLog(outputs: string[]) {
     const warnings: string[] = []
     const iswarning = /LaTeX Warning:/gm
@@ -67,6 +65,38 @@ function warningsLog(outputs: string[]) {
     return warnings
 }
 
+// Emits errors from logs to output stream, and also gives full log to user if requested.
+function printErrors(errorLogPath: any, userLogPath: any) {
+    const errorLogStream = fs.createReadStream(errorLogPath)
+    const errors: any = []
+
+    if (userLogPath) {
+        const userLogStream = fs.createWriteStream(path.resolve(userLogPath))
+        errorLogStream.pipe(userLogStream)
+        userLogStream.on('error', (userLogStreamErr) => console.error(userLogStreamErr))
+    }
+
+    errorLogStream.on('data', (data) => {
+        const lines = data.toString().split('\n')
+        lines.forEach((line, i) => {
+            if (line.startsWith('! Undefined control sequence.')) {
+                errors.push(lines[i - 1])
+                errors.push(lines[i])
+                errors.push(lines[i + 1])
+            } else if (line.startsWith('!')) {
+                errors.push(line)
+            }
+        })
+    })
+
+    errorLogStream.on('end', () => {
+        const errMessage = `LaTeX Syntax Error\n${errors.join('\n')}`
+        const error = new Error(errMessage)
+        console.error(error)
+        //outputStream.emit('error', error)
+    })
+}
+
 function latex(src: string, config: any) {
     const outputStream = through()
 
@@ -74,48 +104,6 @@ function latex(src: string, config: any) {
     const handleErrors = (err: any) => {
         outputStream.emit('error', err)
         outputStream.destroy()
-    }
-
-    // Emits errors from logs to output stream, and also gives full log to user if requested.
-    const printErrors = (tempPath: any, userLogPath: any) => {
-        const errorLogPath = path.join(tempPath, 'texput.log')
-
-        
-        fs.stat(errorLogPath, (err: any, stats: any) => {
-            if (err || !stats.isFile()) {
-                outputStream.emit('error', new Error('No error log file.'))
-                return
-            }
-
-            const errorLogStream = fs.createReadStream(errorLogPath)
-
-            if (userLogPath) {
-                const userLogStream = fs.createWriteStream(path.resolve(userLogPath))
-                errorLogStream.pipe(userLogStream)
-                userLogStream.on('error', (userLogStreamErr) => handleErrors(userLogStreamErr))
-            }
-
-            const errors: any = []
-
-            errorLogStream.on('data', (data) => {
-                const lines = data.toString().split('\n')
-                lines.forEach((line, i) => {
-                    if (line.startsWith('! Undefined control sequence.')) {
-                        errors.push(lines[i - 1])
-                        errors.push(lines[i])
-                        errors.push(lines[i + 1])
-                    } else if (line.startsWith('!')) {
-                        errors.push(line)
-                    }
-                })
-            })
-
-            errorLogStream.on('end', () => {
-                const errMessage = `LaTeX Syntax Error\n${errors.join('\n')}`
-                const error = new Error(errMessage)
-                outputStream.emit('error', error)
-            })
-        })
     }
 
     temp.mkdir('node-latex', (err, tempPath) => {
@@ -175,13 +163,15 @@ function latex(src: string, config: any) {
             tex.stderr.on('data', (data) => {});
             tex.on('close', (code) => { });
             tex.on('exit', (code) => {
-                const lines = logString.split('\n')
+                
                 if (code !== 0) {
-                    printErrors(tempPath, userLogPath)
+                    const errorLogPath = path.join(tempPath, 'texput.log')
+                    printErrors(errorLogPath, userLogPath)
                     return
                 }
                 
                 completedPasses++
+                const lines = logString.split('\n')
                 runComplete(completedPasses, warningsLog(lines)) ? returnDocument() : runLatex(strToStream(src))
             })
         }
