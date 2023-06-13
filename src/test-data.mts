@@ -72,7 +72,8 @@ const VesselsData = {
         "Hull Deductible": "$900", 
         "P & I Deductible": "$500 BI / $1000 PD"}} 
     
+const TestString = "These symbols should all work because they're being escaped ~. You can get 50% off, & save even more from of the original price of $400. For questions, please call #888 or see our website at my_site.com. Also, see above ^"
 
-export { CoverageData, Pets }
 
-//const testString = "These symbols should all work because they're being escaped ~. You can get 50% off, & save even more from of the original price of $400. For questions, please call #888 or see our website at my_site.com. Also, see above ^"
+export { CoverageData, Pets, TestString }
+
