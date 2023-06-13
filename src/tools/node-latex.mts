@@ -18,6 +18,18 @@ import fs from 'fs';
  *
  * @return {DestroyableTransform}
  */
+
+function getWarnings(outputs: string[]) {
+    const warnings: string[] = []
+    const iswarning = /LaTeX Warning:/gm
+    outputs.forEach((line) => {
+        if (iswarning.test(line)) {
+            warnings.push(line)
+        }
+    })
+    return warnings
+}
+
 function latex(src: string, options: any = null) {
   const outputStream: any = through()
 
@@ -79,21 +91,7 @@ function latex(src: string, options: any = null) {
       handleErrors(err)
     }
 
-    let inputStream
-
-    if (!src) {
-      handleErrors(new Error('Error: No TeX document provided.'))
-    }
-
-    inputStream = strToStream(src)
-    // shouldn't be needed since type must be string
-    /*if (typeof src === 'string') {
-      inputStream = strToStream(src)
-    //} else if (src.pipe) {
-      //inputStream = src
-    } else {
-      handleErrors(new Error('Error: Invalid TeX document.'))
-    }*/
+    let inputStream = strToStream(src)
 
     options = options || {}
 
@@ -111,11 +109,10 @@ function latex(src: string, options: any = null) {
     const fonts = options.fonts ? resolvePaths(options.fonts) : tempPath
 
     // The binary command to run (`pdflatex`, `xetex`, etc).
-    // const cmd = options.cmd || 'pdflatex'
     const cmd = options.cmd || 'lualatex'
 
     // The number of times to run LaTeX.
-    const passes = options.passes || 1
+    //const passes = options.passes || 1
 
     // The path to where the user wants to save the error log file to.
     const userLogPath = options.errorLogs
@@ -131,14 +128,6 @@ function latex(src: string, options: any = null) {
 
     // The current amount of times LaTeX has run so far.
     let completedPasses = 0
-
-    // Shouldn't be needed since src type is forced to string
-    /*if (passes > 1 && typeof src !== 'string') {
-      const msg = 'Error: You can\'t process a stream twice. Pass a string to use multiple passes.'
-      handleErrors(new Error(msg))
-
-      return
-    }*/ 
 
     /**
      * Combines all paths into a single PATH to be added to process.env.
@@ -177,7 +166,9 @@ function latex(src: string, options: any = null) {
         handleErrors(new Error(`Error: Unable to run ${cmd} command.`))
       })
 
-      tex.stdout.on('data', (data) => { });
+      let outputString: string = ""
+      tex.stdout.setEncoding('utf-8')
+      tex.stdout.on('data', (data) => { outputString += data});
 
       tex.stderr.on('data', (data) => { });
 
@@ -190,11 +181,10 @@ function latex(src: string, options: any = null) {
         }
 
         completedPasses++
-
+        const lines = outputString.split("\n")
+        const warnings = getWarnings(lines)
         // Schedule another run if necessary.
-        completedPasses >= passes
-          ? returnDocument()
-          : runLatex(strToStream(src))
+        warnings.length > 0 ? runLatex(strToStream(src)) : returnDocument()
       })
     }
 
@@ -220,4 +210,4 @@ function latex(src: string, options: any = null) {
   return outputStream
 }
 
-export default latex;
+export {latex};

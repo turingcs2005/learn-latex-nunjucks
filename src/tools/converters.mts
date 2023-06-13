@@ -3,7 +3,7 @@
 import path from 'path';
 import fs from 'fs';
 import nunjucks from "nunjucks";
-import {latex} from "./another-node-latex.mjs"
+import {latex} from "./node-latex.mjs"
 import {nj_dir, tex_dir, pdf_dir, shared_dir} from "../config.mjs"
 
 const pdf_path = path.resolve(pdf_dir)
@@ -32,9 +32,9 @@ env.addFilter('texscape', function(str) {
 
 
 // Compiles the .tex files CONTENTS (as a STRING) to create the PDF
-function compilePDF(input: string, output_file: string, config: any) {
+function compilePDF(input: string, output_file: string, options: any) {
     const output = fs.createWriteStream(output_file);
-    const pdf = latex(input, config);
+    const pdf = latex(input, options);
     pdf.pipe(output);
     pdf.on('error', (err: any) => console.error(err));
     pdf.on('finish', () => console.log('PDF generated!'));
@@ -64,8 +64,8 @@ function NjkToPDF(input_file: string, output_name: string, data: any, options: a
         TexTest.write(input);
     }
 
-    const input_paths = options.input_paths || [default_input, path.resolve(nj_dir, path.dirname(input_file))]
-    compilePDF(input, path.join(pdf_path, output_name), {input_paths: input_paths})
+    const input_paths = options.inputs || [default_input, path.resolve(nj_dir, path.dirname(input_file))]
+    compilePDF(input, path.join(pdf_path, output_name), {inputs: input_paths})
 }
 
 // reads in a .tex file and returns contents as a string
@@ -78,8 +78,8 @@ function TexToString(file_name: string, file_dir = tex_path) {
 function TexToPDF(input_name: string, output_name: string, options: any = null) {
     const input = TexToString(input_name)
     options = options || {}
-    const input_paths = options.input_paths || [default_input]
-    compilePDF(input, path.join(pdf_path, output_name), {input_paths: input_paths})
+    const input_paths = options.inputs || [default_input]
+    compilePDF(input, path.join(pdf_path, output_name), {inputs: input_paths})
 } 
 
 
