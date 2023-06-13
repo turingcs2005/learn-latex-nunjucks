@@ -182,7 +182,7 @@ function latex(src: string, config: any) {
                 }
                 
                 completedPasses++
-                runComplete(completedPasses, warningsLog(lines), 1) ? returnDocument() : runLatex(strToStream(src))
+                runComplete(completedPasses, warningsLog(lines)) ? returnDocument() : runLatex(strToStream(src))
             })
         }
 
