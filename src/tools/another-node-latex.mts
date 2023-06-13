@@ -41,8 +41,30 @@ function resolvePaths(paths: string[]) {
 }
 
 // TODO currently a stub function! replace with actual function checking if more runs are needed
-function runComplete(num_runs: number, num_needed: number) {
-    return num_runs >= num_needed
+function runComplete(num_runs: number, warning_log: string[], max_runs= 3) {
+    if (warning_log.length == 0) {
+        console.log("Run complete!")
+        return true
+    } else if (num_runs >= max_runs) {
+        console.log(warning_log)
+        console.log("Maximum passes met; document may not be complete")
+        return true
+    } else {
+        console.log(`Starting pass number ${num_runs + 1}`)
+        return false
+    }
+}
+
+
+function warningsLog(outputs: string[]) {
+    const warnings: string[] = []
+    const iswarning = /LaTeX Warning:/gm
+    outputs.forEach((line) => {
+        if (iswarning.test(line)) {
+            warnings.push(line)
+        }
+    })
+    return warnings
 }
 
 function latex(src: string, config: any) {
@@ -109,7 +131,6 @@ function latex(src: string, config: any) {
         const input_paths = config.input_paths || []
         const font_paths = config.font_paths || []
         const precompiled_paths = config.precompiled || []
-        const passes_needed = config.passes || 2
         const args = config.args || ['-halt-on-error']
         args.push('-jobname=texput')
 
@@ -145,17 +166,23 @@ function latex(src: string, config: any) {
                 handleErrors(new Error(`Error: Unable to run ${config.cmd} command.`))
             })
 
-            tex.stdout.on('data', (data) => { });
-            tex.stderr.on('data', (data) => { });
+            let logString: string = ""
+            tex.stdout.setEncoding('utf-8')
+            tex.stdout.on('data', (data) => {
+                logString += data
+            });
+
+            tex.stderr.on('data', (data) => {});
             tex.on('close', (code) => { });
             tex.on('exit', (code) => {
+                const lines = logString.split('\n')
                 if (code !== 0) {
                     printErrors(tempPath, userLogPath)
                     return
                 }
+                
                 completedPasses++
-                // Schedule another run if necessary.
-                runComplete(completedPasses, passes_needed) ? returnDocument() : runLatex(strToStream(src))
+                runComplete(completedPasses, warningsLog(lines), 1) ? returnDocument() : runLatex(strToStream(src))
             })
         }
 
