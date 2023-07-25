@@ -100,4 +100,4 @@ function consolidateTex(input_name: string, output_name: string, ref_dir: string
     return newString
 }
 
-export { NjkToTex, NjkToPDF, TexToPDF, consolidateTex, RenderNjk, TexToString, pdf_path}
+export { NjkToTex, NjkToPDF, TexToPDF, consolidateTex, RenderNjk, TexToString, pdf_path, nunjucks}
