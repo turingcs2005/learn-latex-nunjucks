@@ -1,11 +1,10 @@
-import { NjkToTex, NjkToPDF, TexToPDF, consolidateTex, RenderNjk } from './tools/converters.mjs';
-import { CoverageData, Pets, TestString} from './test-data.mjs'
+import { NjkToTex, NjkToPDF, TexToPDF, consolidateTex, nunjucks } from './tools/converters.mjs';
 import fs from 'fs';
 import path from "path";
 
 
 /* Functions:
-    RenderNjk(file.njk, data[as object])
+    nunjucks.render(file.njk, data[as object])
         Returns string output of Nunjucks rendering
 
     TexToPDF(inputname.tex, outputname.pdf)
@@ -21,18 +20,5 @@ import path from "path";
         Copies in any \input references into a single tex doc, \inputs should be rel to ref directory
 */
 
-const testData = {"Name": "Joe", "Pets": Pets, "CoverageData": CoverageData, "TestString": TestString}
 
-/*
-    Examples
-*/
-
-// Example 1: Using LaTeX
-//TexToPDF('Example1/demo.tex', 'demo.pdf')
-
-// Example 2: Basic Nunjucks
-//NjkToPDF('Example2/main.njk', 'MyPets.pdf', testData)
-
-// Example 3: Project Structure
-//NjkToPDF('Example3/main.njk', 'MyTable.pdf', testData, {save_tex: true})
-//TexToPDF("MyTable.tex", "MyTable2.pdf", {inputs: ['shared', 'projects/Example3']}) // inputs paths needed to render! Will crash without
+// See the notes in the examples for sample code
