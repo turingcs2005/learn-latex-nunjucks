@@ -1,7 +1,5 @@
 'use strict'
 
-
-
 const Pets = {
     "Blueberry": {
         "Age": 3,
@@ -12,15 +10,15 @@ const Pets = {
     },
     "Max": {
         "Age": 5,
-        "Species": "Dog",
-        "Color": "Black",
+        "Species": "dog",
+        "Color": "black",
         "Cat Friendly": false,
         "Dog Friendly": false
     },
     "Sandy": {
         "Age": 0.5,
-        "Species": "Dog",
-        "Color": "Tan",
+        "Species": "DOG",
+        "Color": "TAN",
         "Cat Friendly": true,
         "Dog Friendly": true
     }

@@ -21,7 +21,7 @@ import path from "path";
         Copies in any \input references into a single tex doc, \inputs should be rel to ref directory
 */
 
-const testData = {"Name": "Rick", "Pets": Pets, "CoverageData": CoverageData, "TestString": TestString}
+const testData = {"Name": "Joe", "Pets": Pets, "CoverageData": CoverageData, "TestString": TestString}
 
 // Example 1: Using LaTeX
 //TexToPDF('Example1/demo.tex', 'HanoverDemo.pdf')
@@ -31,4 +31,5 @@ const testData = {"Name": "Rick", "Pets": Pets, "CoverageData": CoverageData, "T
 
 // Example 3: Project Structure
 //NjkToPDF('Example3/main.njk', 'MyTable.pdf', testData, {save_tex: true})
+//TexToPDF("MyTable.tex", "MyTable2.pdf", {inputs: ['shared', 'projects/Example3']}) // inputs paths needed to render! Will crash without
 //consolidateTex('MyTable.tex', 'MyTableConsol.tex', 'projects/Example3') // Pastes in input sections. needs directory
