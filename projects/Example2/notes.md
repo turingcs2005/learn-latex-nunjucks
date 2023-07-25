@@ -16,7 +16,7 @@ It's also important to note that we are using a *custom modification* of the ori
 
 ```
 const env = nunjucks.configure('projects', {
-    autoescape: true,
+    autoescape: false,
     tags: {
         variableStart: '#!',
         variableEnd: '!#',
@@ -26,8 +26,18 @@ const env = nunjucks.configure('projects', {
         commentEnd: '!%'
     }
 });
+
+env.addFilter('texscape', function(str) {
+    const fixslash = str.replace(/\\/g, "\\textbackslash");
+    const fixsymbols = fixslash.replace(/(\$|%|&|#|_|\{|\})/g, "\\$1"); // replace tex special characters
+    const fixspecial = fixsymbols.replace(/(\^|~)/g, "\\$1\{\}") // replace tex special characters with a different replacement syntax
+    return fixspecial;
+});
 ```
-This syntax was chosen to minimize conflicts with the LaTeX syntax or symbols that are frequently used in text writing. Nunjucks was created as a templating engine for HTML, but the custom configuration allows it to be used with LaTeX. I have made a simple extension to add some code highlighting, but have not rigorously tested it. *If you use a different Nunjucks extension, it will not work because it will be configured for traditional Nunjucks syntax and HTML.* 
+
+The first chunk defines the custom Nunjucks syntax we're using. This syntax was chosen to minimize conflicts with the LaTeX syntax or symbols that are frequently used in text writing. Nunjucks was created as a templating engine for HTML, but the custom configuration allows it to be used with LaTeX. I have made a simple extension to add some code highlighting, but have not rigorously tested it. *If you use a different Nunjucks extension, it will not work because it will be configured for traditional Nunjucks syntax and HTML.* 
+
+We also add a filter called `texscape` which should automatically fix characters that LaTeX escapes. We turned `autoescape` *off* because it's intended for HTML special characters. See the next section for more details on this.
 
 Nunjucks effectively operates on a text/string level-- it uses the instructions given to generate text. Nunjucks doesn't "know" or "understand" LaTeX or HTML.
 
@@ -39,14 +49,16 @@ The basic constructs of Nunjucks are *blocks*, *variables*, and *filters*.
 
 #### Blocks
 
-Blocks can be used for inheriting common chunks of test like blocks in PUG/JADE, but I haven't found this particularly relevant for PDF generation. However, blocks can also be used to perform various functions. Nunjucks comes with a number of existing block functions, and you can create your own (which are called *macros*). https://mozilla.github.io/nunjucks/templating.html#tags
+Blocks can be used for inheriting common chunks of text, similar to blocks in PUG. I haven't found this particularly relevant for PDF generation, but blocks can also be used to perform various functions. Nunjucks comes with a number of existing block functions, and you can create your own (which are called *macros*). https://mozilla.github.io/nunjucks/templating.html#tags
 
-Some blocks apply to all of the content between a starting block and an ending block. A *for* block uses the following syntax: (note that < > is used for demonstration purposes and should not appear in the code)
+Some blocks apply to all of the content between a starting block and an ending block. A `for` block uses the following syntax: 
+
 ```
 [## for *item* in *items* ##]
 < Instructions for each item >
 [## endfor ##]
 ```
+*note that < > is used for demonstration purposes and should not appear in the code*
 
 Other blocks can be contained in a single statement and do not need an ending block:
 ```
@@ -67,7 +79,7 @@ For example, if our main.njk file contains:
 ```
 Hi there #!Name!#, hello world!
 ```
-And we run 
+And we run: 
 ```console.log(nunjucks.render('main.njk', {Name: "Joe"}))```
 
 Our output will be:
@@ -81,7 +93,6 @@ Filters are a feature Nunjucks provides to apply filters to data. In some ways f
 
 Here are all of the already defined Nunjucks filters: https://mozilla.github.io/nunjucks/templating.html#builtin-filters
 
-You can also define your own, but I haven't had a need to do this yet for PDF generation. 
 
 Filters are called using a pipe operator. If this is our main.njk file:
 ```
@@ -152,33 +163,9 @@ The output of this will be:
 ```
 Our current pets are:
 
-Blueberry : {&quot;Age&quot;:3,&quot;Species&quot;:&quot;Cat&quot;,&quot;Color&quot;:&quot;Grey&quot;}
-
-Max : {&quot;Age&quot;:5,&quot;Species&quot;:&quot;dog&quot;,&quot;Color&quot;:&quot;black&quot;}
-
-Sandy : {&quot;Age&quot;:0.5,&quot;Species&quot;:&quot;DOG&quot;,&quot;Color&quot;:&quot;TAN&quot;}
-```
-
-Whoops, what's going on?
-
-Nunjucks is autoescaping the ```"``` and sanitizing it. To avoid this, we can designate the input as ```safe```
-
-If we change main.njk to:
-```
-[## for pet, attrs in Pets ##]
-#!pet!# : #!attrs|dump|safe!#
-[## endfor ##]
-```
-
-Our output is:
-```
-Our current pets are:
-
 Blueberry : {"Age":3,"Species":"Cat","Color":"Grey"}
 
 Max : {"Age":5,"Species":"dog","Color":"black"}
 
 Sandy : {"Age":0.5,"Species":"DOG","Color":"TAN"}
 ```
-
-Due to some weirdness with the escaping and HTML vs LaTeX, I'm looking into changing the configuration to handle this appropriately by default, and shift the code to having autoescape *off*
