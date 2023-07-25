@@ -6,7 +6,6 @@
 \usepackage{xcolor}
 \usepackage{lineno}
 \usepackage{url}
-%\usepackage{tabularx}
 \usepackage{setspace}
 \usepackage{array}
 \usepackage{calc}
@@ -28,13 +27,17 @@
 
 \newcolumntype{Z}[1]{>{\raggedright\arraybackslash}X{#1}}
 
+\newcommand{\TODO}[1]{
+\vspace{\baselineskip} \par \noindent \hl{\textbf{TODO:} #1}
+}
+
 \begin{document}
 
 \section{Quick Start}
 
 This is a quick guide that I'm working on to introduce LaTeX, but Overleaf also has very good documentation of LaTeX: \url{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}
 
-\url{http://wch.github.io/latexsheet/latexsheet.pdf}
+Also see: \url{http://wch.github.io/latexsheet/latexsheet.pdf}
 
 \medskip
 In this section, we'll go over how to set up a very simple LaTeX project. In the first line of your document, declare the document class. For most purposes, ``article" is fine. You'll also declare the beginning and end of your document. The lines between declaring the document class and beginning the document are referred to as the \textit{preamble}. This is where you import packages and may define custom functions (commands). It functions somewhat similarly to CSS and the HEAD of an HTML file. Your starting document might look like:
@@ -66,6 +69,8 @@ $..$        Indicates that the contents (between $) are in "math mode"
 *           TODO, environments that are similar to other commands with slight changes
 \end{verbatim}
 
+\TODO{Finish table}
+
 \subsection{Basic Styling}
 \label{subsection:basic-styles}
 
@@ -79,22 +84,25 @@ $..$        Indicates that the contents (between $) are in "math mode"
 \newpage            Starts a new page
 \end{verbatim}
 
+\TODO{Change highlighting}
+
 \noindent By default, the font size for an article is 10pt. LaTeX defines a number of relative font sizes that adjust relative to the global font size if the global size is changed. See \url{https://www.sascha-frank.com/latex-font-size.html} for details. Note that commands are case-sensitive. Here's an example of changing sizes:
 
 \medskip
 \inputflag
 \begin{verbatim}
-{\small We're going to start small} and then {\Large get bigger}. 
-{\LARGE This is really big!} 
-{\large And this line is in between.}  
+\small We're going to start small and then \Large get bigger. 
+\LARGE This is really big!
+\large And this line is in between.
+\normalsize We have to reset the size to ``normal" to keep the rest of the document in our standard size
 \end{verbatim}
-%\noindent \rule{6in}{1pt}
 
 \outputflag
 
-{\small We're going to start small} and then {\Large get bigger}. 
-{\LARGE This is really big!} 
-{\large And this line is in between.}
+\small We're going to start small and then \Large get bigger. 
+\LARGE This is really big!
+\large And this line is in between.
+\normalsize We have to reset the size to ``normal" to keep the rest of the document in our standard size
 
 \medskip
 \noindent Some features in LaTeX allow a length to be input. LaTeX accepts cm, mm, in, pt, ex, and more. For details, see \url{https://www.overleaf.com/learn/latex/Lengths_in_LaTeX}
@@ -122,7 +130,7 @@ An image can be included with the \textbf{graphicx} package and the file name (o
 \end{environment}
 \end{verbatim}
 
-\noindent You can also create and define your own custom environments. Some environments have parameters (typically optional). Many environments require specific packages to be used, which will be noted if applicable. Also note that although we'll use tabs to assist with clarity, LaTeX is typically insensitive to tabs.
+\noindent You can also create and define your own custom environments. Some environments have parameters (typically optional). Many environments require specific packages to be used, which will be noted if applicable. Also note that although we'll use tabs to assist with clarity, LaTeX is typically (always?) insensitive to tabs.
 
 \subsection{Packages}
 
@@ -143,11 +151,12 @@ To start, consider using this as your preamble:
 \medskip
 \subsection{Troubleshooting}
 
-\noindent \textbf{TODO}:
+\TODO{}
 \begin{itemize}
     \item Different versions of compilation
     \item hbox over/underflow
     \item Left quotes
+    \item SOUL package, issues and alternatives
 \end{itemize}
 
 
@@ -156,7 +165,7 @@ To start, consider using this as your preamble:
 
 \subsection{Line Breaks and Vertical Space}
 
-There are multiple ways to add vertical spacing in LaTeX, but some are considered "poor practice". In many cases choosing the "wrong" one will cause "hbox overfull" warnings, but I don't think it's necessary to worry about when just getting started.
+There are multiple ways to add vertical spacing in LaTeX, but some are considered ``poor practice". In many cases choosing the ``wrong" one will cause ``hbox overfull" warnings, but I don't think it's necessary to worry about when just getting started.
 
 \vspace{\baselineskip} \noindent
 Here are some ways to create vertical space with some quick notes on use:
@@ -178,9 +187,10 @@ Here are some ways to create vertical space with some quick notes on use:
 \noindent Note: Leaving empty lines in the text will start a new paragraph, but will not add any additional whitespace. Empty lines are essentially equivalent to using the \textbackslash par command.
 
 \vspace{\baselineskip} \noindent
-I would recommend using new paragraphs "functionally" when a new paragraph is started and using \textbackslash vspace for "stylistic" line separation. Use \textbackslash \textbackslash when inside of a tabbing/tabular environment (covered later this section).
+I would recommend using new paragraphs ``functionally" when a new paragraph is started and using \textbackslash vspace for "stylistic" line separation. Use \textbackslash \textbackslash when inside of a tabbing/tabular environment (covered later this section).
 
 \vspace{\baselineskip} \noindent
+%\newline
 Additional information:
 
 \vspace{\baselineskip} \noindent
@@ -188,11 +198,12 @@ Additional information:
 
 \noindent \url{https://www.overleaf.com/learn/latex/Line_breaks_and_blank_spaces}
 
-\vspace{\baselineskip} \par \noindent \hl{TODO: setspace package}
+\TODO{Negative space}
+\TODO{setspace package}
 
 \subsection{Tabbing}
 
-\noindent The environment \textit{tabbing} can be used to align text. Note that the \textbf{tabbing} environment is \textbf{not} the same as the \textbf{tabular} environment. The tabbing environment is for creating sections of aligned text, while the tabular environment is for creating tables. This is covered in ?
+\noindent The environment \textit{tabbing} can be used to align text. Note that the \textbf{tabbing} environment is \textbf{not} the same as the \textbf{tabular} environment. The tabbing environment is for creating sections of aligned text, while the tabular environment is for creating tables. This is covered in \TODO{add section reference}
 
 \vspace{\baselineskip} \par \noindent Below is a small example of the tabbing environment. The first line determines the placement of the tabs and the following text is what's actually displayed. Within the tabular environment, use \textbackslash \textbackslash for line breaks.
 
@@ -214,6 +225,8 @@ Additional information:
     More \> This is even \> more description \\     % \> adds a tab
     \> \> This is extra tabbed
 \end{tabbing}
+
+\TODO{wrapping}
 
 \subsection{Centering}
 
@@ -346,7 +359,7 @@ Curabitur ligula nisi, convallis at ante sit amet, tristique hendrerit felis. Fu
 
 \subsection{Customized lists}
 
-\noindent \hl{TODO}
+\TODO{}
 
 \noindent Requires \textbf{\textbackslash usepackage[shortlabels]\{enumitem\}}
 
@@ -382,7 +395,7 @@ Curabitur ligula nisi, convallis at ante sit amet, tristique hendrerit felis. Fu
 \newpage
 \section{Tables}
 
-\noindent Tables are simple to make, but can be challenging to format precisely. Multiple packages exist that may be used for table creation. Creating a table typically uses either the \textbf{tabular} package or the \textbf{tabularx} package. A table may or may not use the \textbf{table} environment. We'll be starting with only \textbf{tabular}.
+\noindent Tables are simple to make, but can be challenging to format precisely. Multiple packages exist that may be used for table creation. Creating a table typically uses either the \textbf{tabular} package or the \textbf{tabularx} package. A table may or may not use the \textbf{table} environment. In this guide, We'll be using only \textbf{tabular}.
 
 \subsection{Simple Tables}
 For a very simple table, we need to specify the type of column to use and whether or not to include vertical rules. The contents of each cell are separated by \& within a row and \textbackslash \textbackslash  for a column. Horizontal rules are denoted by \textbackslash hline. It's also generally recommended to center tables. Here's a simple example: 
@@ -439,6 +452,8 @@ For a very simple table, we need to specify the type of column to use and whethe
 
 \subsection{Column Options}
 
+\TODO{Adjust examples}
+
 Standard column types:
 \begin{verbatim}
 c               centred column
@@ -451,7 +466,7 @@ b{width}        paragraph column with text vertically aligned at the bottom (req
 
 % X               calculated to p{width}; tabularx only
 
-\noindent You can also create your own custom columns. This one creates a left-aligned column of a custom width:
+\noindent You can also create your own custom columns. This one creates a left-aligned column of a custom width: \TODO{}
 
 \begin{verbatim}
 \newcolumntype{F}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -824,10 +839,10 @@ This also simplifies multicolumn handling:
 
 
 \subsection{The table environment}
-TODO, but in summary: it's not needed and can cause unexpected behavior due to LaTeX handling your table as a float and trying to place it ``nicely"
+\TODO{}, but in summary: it's not needed and can cause unexpected behavior due to LaTeX handling your table as a float and trying to place it ``nicely"
 
 \newpage
-\section{Page Layout: TODO}
+\section{Page Layout: \TODO{}}
 
 \subsection{Geometry package}
 The \textbf{geometry} package can be used to set the page layout. For this document, we're using:
@@ -835,47 +850,51 @@ The \textbf{geometry} package can be used to set the page layout. For this docum
 \usepackage[letterpaper, top=0.75in, rmargin=1in, lmargin=1in]{geometry}
 \end{verbatim}
 
+\TODO{Reference image}
+
 \subsection{Headers and footers}
 Packages \textbf{fancyhdr} and \textbf{extramarks}
 
 \newpage
-\section{Misc: TODO}
+\section{Misc}
 
+\TODO{}
 \subsection{Custom commands}
 Includes if/then and iterating
 
 \subsection{Constant variables}
 
-\subsection{Inputs vs imports}
-
-\subsection{Fonts}
 
 
-\section{Compilation Details: TODO}
+\newpage
+\section{Compilation Details: \TODO{}}
 
 \subsection{Special Characters}
 \noindent Which characters need to be escaped and how to escape them
 \begin{verbatim}
-\           Begins a command
-%           Comment out line
-{}          Parameters for commands
-[]          Brackets may indicate parameters but do not typically need to be escaped
-&           Delimiter for alignment
-$..$        Indicates that the contents are in "math mode"
-\\          Line break
-#           TODO
-@           TODO
-_           TODO
-^           TODO
-~           TODO
-*           TODO
-http://www.emerson.emory.edu/services/latex/latex_toc.html#SEC155
+\           \textbackslash
+$           \$
+%           \%
+&           \&
+#           \#
+_           \_
+{}          \{ \}
+^           \^{}
+~           \~{}
 \end{verbatim}
+
+\noindent TODO: ``quotation marks"
+
+\subsection{Inputs vs imports}
 
 \subsection{Different versions of TeX}
 
+\subsection{Fonts}
+
 \subsection{Troubleshooting}
 Paths, number of times it needs to run so that references work, etc
+
+Hyperref package
 
 
 \end{document}

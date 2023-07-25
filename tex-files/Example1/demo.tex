@@ -6,18 +6,20 @@
 \usepackage{graphicx}
 \usepackage{lineno}
 \usepackage[shortlabels]{enumitem}
-\usepackage{soul}
+\usepackage{ulem}
 \usepackage{xcolor}
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{ifthen}
 \usepackage{setspace}
-\usepackage{multirow}
-\usepackage{tabularx}
 \usepackage[letterpaper, includeheadfoot, rmargin=0.5in, lmargin=0.5in, 
 top=0.25in, headsep=0.2in, headheight=0.5in, bmargin=0.5in]{geometry}
-\usepackage{url}
 \usepackage{calc}
+\usepackage{url}
+
+
+\newcommand\hl{\bgroup\markoverwith
+  {\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}\ULon}
 
 \newenvironment{changemargin}[2]{%
   \begin{list}{}{%
@@ -57,12 +59,6 @@ top=0.25in, headsep=0.2in, headheight=0.5in, bmargin=0.5in]{geometry}
 \end{center}
 }
 
-\newcolumntype{C}[2]{>{\raggedright\arraybackslash}p{#1}{#2}}
-
-\newcolumntype{Z}[1]{>{\raggedright\arraybackslash}X{#1}}
-
-\newcolumntype{A}[1]{>{\raggedright\arraybackslash}p{#1 - 2\tabcolsep}}
-
 \newcommand{\mybox}{\fboxsep=-.15pt\fbox{\rule{0pt}{2.5ex}\rule{2.5ex}{0pt}}}
 
 \newcommand{\checkbox}[2]{% 
@@ -73,21 +69,26 @@ top=0.25in, headsep=0.2in, headheight=0.5in, bmargin=0.5in]{geometry}
 
 \setlength\extrarowheight{4pt}
 \setlength\tabcolsep{0.08in}
-\newcommand\VesselItem{1}
+
+\newcolumntype{A}[1]{>{\raggedright\arraybackslash}p{#1 - 2\tabcolsep}}
+\newcommand{\policynum}{SYM-A12345C-00}
+
 \newcommand{\policyheader}{
 \noindent
-\textbf{Policy Holder:} Tom Murphy \\
-\textbf{Policy Number:} 15345 \\
-\textbf{Effective Dates:} 4/18/2022 to 4/17/2023
+\textbf{Policy Holder:} Test Person \\
+\textbf{Policy Number:} SYM-A12345C-00 \\
+\textbf{Effective Dates:} 5/1/2023 to 5/1/2024
 }
 
+\newcommand{\PIAmt}{\$500,000}
+\newcommand{\PIRate}{}
+\newcommand{\PIPremium}{\$7,372}
 
 \begin{document}
 
 \extramarks{}{}
 
-
-\noindent \begin{tabular}{ |C{2.5in}| }
+\noindent \begin{tabular}{ |A{2.65in}| }
     \hline
     \textbf{Insurer's Name and Address} \\
     \hline
@@ -100,14 +101,16 @@ top=0.25in, headsep=0.2in, headheight=0.5in, bmargin=0.5in]{geometry}
 \begin{tabbing}
     \hspace{3in} \= \hspace{1.75in} \= \kill
     \textbf{DECLARATIONS} \> Previous Policy No: \> \textbf{POLICY NO}\\
-    \>  \> 15345 \\
+    \> SYM-A12345C-01 \> SYM-A12345C-00 \\
     \\
     \underline{\textbf{Items}} \\
-    \textbf{1. Assured and Address} \> \> Tom Murphy \\
-    \> \> 215 East St \\
-    \> \> Philadelphia, PA 19142 \\
+    \textbf{1. Assured and Address} \> \> Test Person \\
+    \> \> 1 Whalmouth Ln \\
+    \> \> 
+Falmouth, MA 02540
+ \\
     \\
-    \textbf{2. Policy Period:} Noon, standard time at place of issuance from \> \> 4/18/2022 to 4/17/2023 \\
+    \textbf{2. Policy Period:} Noon, standard time at place of issuance from \> \> 5/1/2023 to 5/1/2024 \\
     \\
     \underline{\textbf{Producer's Name and Address}} \> \underline{\textbf{Producer's Code}} \\
     INTERNATIONAL SPECIAL RISKS INS \> 08081334 50 \\
@@ -120,46 +123,59 @@ top=0.25in, headsep=0.2in, headheight=0.5in, bmargin=0.5in]{geometry}
 
 \noindent \textbf{4.  This policy covers only with respect to such and so many of the coverages as are indicated by a specific amount or limit of insurance applicable thereto.  Subject otherwise to all the terms of this policy having reference thereto, the Amount of Limit applicable to each vessel shall be as stated opposite the description of each vessel in Item 5(a).}
 
-\newlength\tbwidth
-\setlength\tbwidth{7.25in}
-% total 7.25in
+
+\newlength\CovTbWidth
+\setlength\CovTbWidth{7.25in}
 \begin{center}
-\begin{tabular}{ | A{0.3\tbwidth} | A{0.25\tbwidth} | A{0.2\tbwidth} | A{0.1\tbwidth} | A{0.15\tbwidth} | }
-\hline
-    \textbf{Coverages} & \textbf{Deductible} & \textbf{Amounts or Limits} & \textbf{Rate} & \textbf{Premium} \\
-\hline
-    \textbf{A. Hull} & \$900 & \$750,000 & 0 & \$7,714 \\
-\hline
-    \textbf{B. Protection and Indemnity} & See Schedule & \$300,000 & 0 & 1000 \\
-\hline
-    \textbf{C. Something} & 1400 & 732,000 & 0 & 1000 \\
-\hline
-    \textbf{D. Hull} & 900 & 750,000 & 0 & 1000 \\
-\hline
-    \textbf{E. Hull} & 900 & 750,000 & 0 & 1000 \\
-\hline
-    \textbf{F. Hull} & 900 & 750,000 & 0 & 1000 \\
-\hline
-    \multicolumn{2}{ |A{0.55 \tbwidth}| }{\textbf{Form Numbers of Endorsements forming part of policy at issue (Insert No. and edition date) TPF01, PIC02, LOU03, SRV04, CB05, ER06, VC08, DOT09, TES10, DT11, ET12, BOW13, GC14, DD15, WQIS}} & \multicolumn{2}{ A{0.3\tbwidth}| }{\textbf{Total Premium}} & CALCSUM \\
-\hline
-    \end{tabular}
-\end{center}
-
-
-
-\begin{center}
-\begin{tabular}{ | A{0.05\tbwidth} | A{0.3\tbwidth} | A{0.15\tbwidth} | A{0.15\tbwidth} | A{0.15\tbwidth} | A{0.2\tbwidth} | }
-\hline
-    \multicolumn{2}{ |A{0.35\tbwidth}| }{5.(a) Schedule of Vessels} & \multicolumn{4}{A{0.65\tbwidth}| }{AMOUNTS OR LIMITS OF INSURANCE} \\
+\begin{tabular}{ | A{0.3\CovTbWidth} | A{0.25\CovTbWidth} | A{0.2\CovTbWidth} | A{0.1\CovTbWidth} | A{0.15\CovTbWidth} | }
     \hline
-    \textbf{No.} & \textbf{Description} & \textbf{Hull Limit} & \textbf{Protection \& Indemnity Limit} & \textbf{Hull Deductible} & \textbf{P \& I Deductible} \\
-\hline
-    1 & 2012 Viking 35 & \$750,000 & \$300,000 & \$900 & \$500 BI/ \$1000 PD \\
-    2 & & & & & \\
-\hline
-    \end{tabular}
+    \textbf{Coverages}  & \textbf{Deductible}  & \textbf{Amounts or Limits}  & \textbf{Rate}  & \textbf{Premium}  \\
+    \hline
+    
+    \textbf{A. Hull}  & \$3,500  & \$200,000  &   & \$7,940  \\
+    \hline
+    
+    \textbf{B. Protection and Indemnity}  & See Schedule  & \$500,000  &   & \$7,372  \\
+    \hline
+    
+    \textbf{C. Tender}  & \$500  & \$10,000  &   & \$308  \\
+    \hline
+    
+    \textbf{D. Breach of Warranty}  & N/A  & \$100,000  &   & \$107  \\
+    \hline
+    
+    \textbf{E. WQIS (Vessel Pollution)}  & N/A  & \$1,000,000  &   & \$200  \\
+    \hline
+    
+    \textbf{F. Terrorism}  & N/A  & N/A  &   & \$0  \\
+    \hline
+    
+    \multicolumn{2}{ |A{0.55\CovTbWidth}| }{\textbf{Form Numbers of Endorsements} forming part of policy at issue (Insert No. and edition date) PF01, PIC02, LOU03, SRV04, CB05, ER06, VC08, DOT09, TES10, DT11, ET12, BOW13, GC14, DD15, WQIS} & \multicolumn{2}{ A{0.3\CovTbWidth}| }{\textbf{Total Premium}} & \$15,927 \\
+    \hline
+\end{tabular}
 \end{center}
 
+
+\newlength\VesselTbWidth
+\setlength\VesselTbWidth{7.25in}
+\begin{center}
+\begin{tabular}{ | A{0.05\VesselTbWidth} | A{0.3\VesselTbWidth} | A{0.15\VesselTbWidth} | A{0.15\VesselTbWidth} | A{0.15\VesselTbWidth} | A{0.2\VesselTbWidth} | }
+\hline
+\multicolumn{2}{ |A{0.35 \VesselTbWidth}| }{5.(a) Schedule of Vessels} & \multicolumn{4}{A{0.65\VesselTbWidth}| }{AMOUNTS OR LIMITS OF INSURANCE} \\
+\hline
+\textbf{No.}  & \textbf{Description}  & \textbf{Hull Limit}  & \textbf{Protection \& Indemnity Limit}  & \textbf{Hull Deductible}  & \textbf{P \& I Deductible}  \\
+\hline
+
+    1  & 1980 MasterCraft 45  & \$3,500  & \$500,000  & \$3,500  & \$500 BI / \$1,000 PD  \\
+    \hline
+    
+
+    2  & Tender Description 10  & \$10,000  & Included  & \$500  & Included  \\
+    \hline
+    
+
+\end{tabular}
+\end{center}
 
 \newpage
 In  consideration  of  the premium  and  the  stipulations,  terms  and  conditions hereinafter  mentioned,  this  Company does hereby insure:
@@ -167,29 +183,31 @@ In  consideration  of  the premium  and  the  stipulations,  terms  and  conditi
 
 \begin{tabbing}
     \hspace{2in} \=\kill
-    Assured: \> Tom Murphy \\
+    Assured: \> Test Person \\
     \\
-    Whose address is: \> 215 East St \\
-     \> Philadelphia, PA 19142 \\
+    Whose address is: \> 1 Whalmouth Ln \\
+     \> 
+Falmouth, MA 02540
+ \\
     \\
-    Loss, if any, payable to: \> LOSS TO \\
+    Loss, if any, payable to: \> Sam Bellamy, Assured or Order \\
     \\
     
-    Upon the: \> My Ship \\
+    Upon the: \> The Codfather \\
     Her   hull,   tackle,   apparel,   engines,   boilers,   machinery,   appurtenances,   equipment,   stores,   boats   and   furniture \\
     \\
     
-    From \> 4/18/2022 \\
-    Until \> 4/17/2023 at noon Standard Time at place of issuance \\
+    From \> 5/1/2023 \\
+    Until \> 5/1/2024 at noon Standard Time at place of issuance \\
 \end{tabbing}
 
 
 \begin{center}
-    \begin{tabular}{ | C{3in} | C{0.75in} | C{1in} | C{1.75in} | }
+    \begin{tabular}{ | A{3.15in} | A{1in} | A{1.15in} | A{2in} | }
     \hline
     \textbf{AMOUNT INSURED HEREUNDER} & \textbf{RATE} & \textbf{PREMIUM} & \textbf{AGREED VALUATION} \\
     \hline
-    \$ 750,000 &  & \$ 7,714 & \$ 750,000 \\
+    \$200,000 &  & \$7,940 & \$200,000 \\
     \hline
     \end{tabular}
 \end{center}
@@ -251,7 +269,7 @@ In  the  event  of  total  or  constructive  total  loss,  no  claim  to  be  ma
 
 Any  deviation  beyond  the  navigation  limits  provided  herein  shall  void  this  policy;  but  on  the  return  of  the vessel  in  a  seaworthy  condition,  within  the  limits  herein  provided,  this  policy  shall  reattach  and  continue  in  full force and effect, but in no case beyond the termination of this policy.
 
-Warranted by the assured that there shall   be   no   other   insurance   covering   physical   loss   or   damage   to   the vessel  named  herein  other  than  that  which  is  provided  in  lines \ref{line:start-std-terms} through \ref{line:end-std-terms} hereof  but  permission  is granted to  carry  other  insurance  of  whatever  kind  or  nature  not  covered  by  this  policy  or  additional  amounts  of  insurance of the kind or nature covered by this policy other than as provided in lines \ref{line:start-std-terms} through \ref{line:end-std-terms}. \hl{THIS IS THE SECTION TO FIX}
+Warranted by the assured that there shall   be   no   other   insurance   covering   physical   loss   or   damage   to   the vessel  named  herein  other  than  that  which  is  provided  in  lines \ref{line:start-std-terms} through \ref{line:end-std-terms} hereof  but  permission  is granted to  carry  other  insurance  of  whatever  kind  or  nature  not  covered  by  this  policy  or  additional  amounts  of  insurance of the kind or nature covered by this policy other than as provided in lines \ref{line:start-std-terms} through \ref{line:end-std-terms}.
 
 This  insurance  shall  be  void  in  case  this  policy  or  the  vessel  named  herein,  shall  be  sold,  assigned,  transferred or  pledged,  or  if  there  be  any  change  of  management  or  charter  of  the  vessel,  without  the  previous  consent  in writing of this Company.
 
@@ -265,23 +283,22 @@ Warranted   free   of   loss   or   damage   in   consequence   of   strikes,   
 
 Either  party  may  cancel  this  policy  by  giving  ten  days'  notice  in  writing;  if  at  the  option  of  this  Company pro rata rates, if at the request of the assured short rates, will be charged - and arrival.
 
-NAVIGATION LIMITS - SPECIAL CONDITIONS - ENDORSEMENT, ETC.
+\centerbold{NAVIGATION LIMITS - SPECIAL CONDITIONS - ENDORSEMENT, ETC.}
 
-Attached to and made part of Policy No. \hl{number} of The Hanover Insurance Company
+Attached to and made part of Policy No. \policynum of The Hanover Insurance Company
 
 \end{linenumbers}
 
 \extramarks{}{Taylor Policy Form:  TPF 01 040114}
 
-
 \newpage
 \extramarks{\policyheader}{}
 \centerbold{\Large THIS ENDORSEMENT CHANGES THE COVERAGE. PLEASE READ IT CAREFULLY}
-\centerbold{\Large \ul{LOSS OF USE ENDORSEMENT }}
+\centerbold{\Large \uline{LOSS OF USE ENDORSEMENT }}
 \extramarks{}{}
 \noindent Please note that:
 \begin{enumerate}
-    \item Coverage: In consideration of a premium of \$ Incl, if, in consequence of loss, damage or occurrence covered under the Taylor Hull Form (SP-36C) an insured vessel is unable to perform the activity of commercial fishing, this insurance shall provide the Assured with a per diem payment for loss of use of the insured vessel.
+    \item Coverage: In consideration of a premium of \$ VALUE Incl, if, in consequence of loss, damage or occurrence covered under the Taylor Hull Form (SP-36C) an insured vessel is unable to perform the activity of commercial fishing, this insurance shall provide the Assured with a per diem payment for loss of use of the insured vessel.
     \item Resumption of Operations: It is a condition of this coverage that if the Assured could reduce the loss resulting from the interruption of business:  
         \begin{enumerate}[a.]
         \item by complete or partial resumption of operation of the vessel herein described, whether damaged or not; or 
@@ -320,7 +337,7 @@ Attached to and made part of Policy No. \hl{number} of The Hanover Insurance Com
             \end{enumerate}
         \item We may examine any Assured under oath, while not in the presence of any other 
         Assured and at such times as may be reasonably required, about any matter relating to 
-        this claim, including as Assured’s books and records.  In the event of an examination, an Assured’s answers must be signed.
+        this claim, including as Assured's books and records.  In the event of an examination, an Assured's answers must be signed.
         \end{enumerate}
     \item Loss Determination:	A covered loss and/or machinery loss while the vessel is active engaged in commercial fishing operations.
     \item Loss Payment:	We will pay for covered loss within 30 days after we receive the sworn proof of loss, if you have complied with all terms of this endorsement and;
@@ -338,7 +355,7 @@ Attached to and made part of Policy No. \hl{number} of The Hanover Insurance Com
 \newpage
 \extramarks{\policyheader}{}
 \centerbold{\Large THIS ENDORSEMENT CHANGES THE COVERAGE. PLEASE READ IT CAREFULLY}
-\centerbold{\Large \ul{STRIKES, RIOTS, \& VANDALISM COVERAGE }}
+\centerbold{\Large \uline{STRIKES, RIOTS, \& VANDALISM COVERAGE }}
 \extramarks{}{}
 \noindent This endorsement modifies insurance provided under the following: SP-39 C TAYLOR 1953 (Rev. 70) \newline
 
@@ -352,7 +369,38 @@ Attached to and made part of Policy No. \hl{number} of The Hanover Insurance Com
 \newpage
 \extramarks{\policyheader}{}
 \centerbold{\Large THIS ENDORSEMENT CHANGES THE COVERAGE. PLEASE READ IT CAREFULLY}
-\centerbold{\Large \ul{VESSEL CLAUSES ENDORSEMENT }}
+\centerbold{\Large \uline{EXTENDED RADIOACTIVE CONTAMINATION EXCLUSION CLAUSE WITH U.S.A. ENDORSEMENT (AIMU - MARCH 1, 2003) }}
+\extramarks{}{}
+This clause shall be paramount and shall override anything contained in this insurance inconsistent therewith.
+
+\begin{enumerate}[label*=\arabic*]
+    \item In no case shall this insurance cover loss damage liability or expense directly or indirectly caused by or contributed to, by or arising from:
+        \begin{enumerate}[label*=.\arabic*]
+        \item ionizing radiations from or contamination by radioactivity from any nuclear fuel or from any nuclear waste or from the combustion of nuclear fuel.
+        \item the radioactive, toxic, explosive or other hazardous or contaminating properties of any nuclear installation, reactor or other nuclear assembly or nuclear component thereof.
+        \item any weapon or device employing atomic or nuclear fission and/or fusion or other like reaction or radioactive force or matter.
+        \item the radioactive, toxic, explosive or other hazardous or contaminating properties of any radioactive matter. The exclusion in this sub-clause does not extend to radioactive isotopes, other than nuclear fuel, when such isotopes are being prepared, carried, stored, or used for commercial, agricultural, medical, scientific or other similar peaceful purposes. 
+        \end{enumerate}
+\end{enumerate}
+\noindent {\large RADIOACTIVE CONTAMINATION EXCLUSION CLAUSE  (U.S.A. ENDORSEMENT)} \newline
+
+\noindent This insurance is subject to the Extended Radioactive Contamination Exclusion Clause (March 1, 2003) provided that:
+\begin{itemize}
+    \item if fire is an insured peril, and;
+    \item where the subject matter insured or, in the case of a reinsurance, the subject matter insured by the original insurance, is within the U.S.A., its islands, onshore territories or possessions, and;
+    \item a fire arises directly or indirectly from one or more of the causes detailed in Sub-Clauses 1.1, 1.2, and 1.4 of the Extended Radioactive Contamination Exclusion Clause March 1, 2003 any loss or damage arising directly from that fire shall, subject to the provisions of this insurance (reinsurance), be covered, EXCLUDING however any loss damage liability or expense caused by nuclear reaction, nuclear radiation, or radioactive contamination arising directly or indirectly from that fire. 
+\end{itemize}
+\remainunchanged
+\extramarks{}{ER 06 040114}
+
+
+
+\newcommand\VesselItem{1}
+
+\newpage
+\extramarks{\policyheader}{}
+\centerbold{\Large THIS ENDORSEMENT CHANGES THE COVERAGE. PLEASE READ IT CAREFULLY}
+\centerbold{\Large \uline{VESSEL CLAUSES ENDORSEMENT }}
 \extramarks{}{}
 \noindent The policy is hereby amended only as respects the item(s) marked by x
 
@@ -420,33 +468,99 @@ x \hspace{0.25in} \textbf{Navigation Warranty}
 Warranted that the vessel be confined in the Navigational Limits stated in the Declarations or applicable Endorsement, but in no event to exceed the limits permitted by the United States Coast Guard.
 
 If item 3. of Operations Warranty is checked, the Navigation Warranty for insured vessel(s) is limited to port of lay-up.
+
+\vspace{\baselineskip}
+x \hspace{0.25in} \textbf{Navigation Limits Warranty Endorsement}
+
+\underline{VESSELS OVER 40' IN LENGTH}
+
+Coastal and inland tributaries of New England up to 70 miles offshore between May 1 and October 15, and up to 40 miles offshore between October 16 and April 30.
+
+\underline{VESSELS 30' to 39'11" IN LENGTH}
+
+Coastal and inland tributaries of New England up to 40 miles offshore between May 1 and October 15, and up to 30 miles offshore between October 16 and April 30.
+
+\underline{VESSELS under 30' IN LENGTH}
+
+Coastal and inland tributaries of New England up to 20 miles offshore between May 1 and October 15, and up to 10 miles offshore between October 16 and April 30.
+
+\vspace{\baselineskip}
+x \hspace{0.25in} \textbf{Theft Coverage Endorsement}
+
+This insurance also covers loss of or damage directly caused by theft, including any act of stealing or unlawful taking.
+
+\vspace{\baselineskip}
+\checkbox{1} TTransfer of Collision Liability Coverage from Hull Form (lines 39-60 inclusive) to the Protection and Indemnity Form (lines 17 and 18)
+
+It is understood and agreed that the Collision Liability Clause appearing in lines 39 to 60 inclusive of the Hull Form (SP-39C) is hereby deleted in its entirely. It is also understood and agreed that lines 60 to 62 inclusive of the Protection and Indemnity Clauses (SP-38) are deleted.
+
+\vspace{\baselineskip}
+x \hspace{0.25in} \textbf{Pollution Exclusion Endorsement}
+
+This policy, with respect to all insurances provided hereunder, shall not insure against any loss, damage, cost, liability, expense, fine or penalty, of any kind or nature whatsoever, imposed on the Assured, directly or indirectly, in consequence of, or with respect to, the actual or potential discharge, emission, spillage or leakage upon or into the seas, waters, land or air, of oil, petroleum products, chemicals or other substances of any kind or nature whatsoever.
+
+All terms and conditions of this policy shall be deemed amended to the extent necessary to give full force and effect to this exclusion.
+
+\vspace{\baselineskip}
+x \hspace{0.25in} \textbf{Additional Exclusions}
+
+Notwithstanding anything to the contrary contained in this policy, this insurance is warranted free from any claim for loss, damage or expense caused by or resulting from;
+
+\begin{enumerate}[label*=\alph*]
+    \item \textbf{Fishing Equipment:}
+    \begin{enumerate}[label*=\arabic*]
+        \item Loss of cables or anchors lost or sacrificed on the fishing grounds, except in case of total loss of the vessel.
+        \item Loss of, damage to, or expense in connection with Assured’s dinghies or rafts, nets, lines, traps, trawls, outfits and other portable fishing gear.
+        \item Loss or, or damage to or expense in connection with Assured’s fishing and trawling machinery and equipment (i.e. tackle, winches, masts, booms, mast and boom rigging and their appurtenances occurring while such equipment is actually being used in fishing and/or trawling operations and/or operations incidental thereto unless the Assured shall establish that such loss was caused soley by the vessel inself stranding, sinking, or colliding with another vessel.
+    \end{enumerate}
+    \item \textbf{Racing and Over the Side Activities:}
+    \begin{enumerate}[label*=\arabic*]
+        \item Physical loss of or damage to and bodily injury and/or any liability of whatsoever nature arising out of the insured vessel engaging in any racing whether sanctioned or otherwise.
+        \item Bodily injury and/or liability of whatsoever nature caused by or contributed to or arising from swimming, diving, skin diving or snorkeling or any similar activities from the insured vessel.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+\textbf{Applicable to Protection and Indemnity Only}
+
+\vspace{\baselineskip}
+
+\checkbox{} CCrew
+
+\vspace{\baselineskip}
+
+It is hereby agreed that the total number of paid crew members shall not exceed \fbox{ \phantom{textab} }
+
+\vspace{\baselineskip}
+
+\fbox{ \phantom{textab} } Including Captain
+
+\vspace{\baselineskip}
+
+\fbox{ \phantom{textab} } Excluding Captain
+
+\vspace{\baselineskip}
+
+\checkbox{} CCrew Exclusions
+
+It is understood and agreed that line 14 of the Protection and Indemnity Clauses (Form SP-38) is amended as follows: “Loss of life of, or injury to, or illness of, any person, excluding, however, all crew members and employees of the Assured.” And that lines 15 and 16 are deleted in their entirety.
+
+\vspace{\baselineskip}
+
+\checkbox{} PPassenger Warranty
+
+In consideration of premium charged, passenger carrying operations are covered.
+
+\vspace{\baselineskip}
+
+It is understood and agreed that coverage afforded to passengers by line 14 of the Protection and Indemnity Clauses (Form SP-38) does not apply if the number of passengers aboard exceeds the number allowed by the United States Coast Guard Certificate of Operation.
+
 \remainunchanged
 \extramarks{}{VC 08 070915}
 
 
-
 \newpage
-\extramarks{\policyheader}{}
-\centerbold{\Large THIS ENDORSEMENT CHANGES THE COVERAGE. PLEASE READ IT CAREFULLY}
-\centerbold{\Large \ul{DELIBERATE DAMAGE CLAUSE ENDORSEMENT }}
-\extramarks{}{}
-\noindent In consideration of premium paid and subject to the terms and conditions of the Hull coverage hereunder, it is understood and agreed that this insurance also covers loss of or damage to the Vessel directly caused by government authorities acting for the public welfare to prevent or mitigate a pollution hazard, or threat thereof, resulting directly from damage to the Vessel for which the Underwriters are liable under this insurance, provided such act of governmental authorities has not resulted from want of due diligence by the Assured, the Owners, or Managers of the Vessel or any of them to prevent or mitigate such hazard or threat. Masters, Officers, Crew or Pilots are not to be considered Owners within the meaning of this clause should they hold shares in the Vessel. \newline
-
-\noindent Nothing herein contained shall be held to vary, waive, alter, or extend any of the terms, conditions, agreements or declarations of the Policy, other than as herein stated. \newline
-
-\noindent This endorsement shall not be binding unless countersigned by a duly authorized agent of the company; provided that if this endorsement takes effect as of the effective date of the policy and, at issue of said policy, forms a part thereof, countersignature on the declarations page of said Policy by a duly authorized agent of the company shall conclude valid countersignature of this endorsement. \newline
-
-\begin{center}
-    \noindent Countersigned by \line(1, 0){300} \newline
-    \emph{Authorized Agent}
-\end{center}
-\remainunchanged
-\extramarks{}{DD 15 040114}
-
-
-
-\newpage
-\extramarks{}{}
+ \extramarks{}{} 
 \noindent \textbf{\huge{Insurance Policy Information}} \newline
 
 \hfill \break
@@ -492,6 +606,164 @@ customer of the Hanover. Should you have any questions after reviewing this info
 \noindent \textbf{Should you have any questions about your bill, please call Customer Service toll-free number: 1-800-922-8427.
 We look forward to being of service to you.}
 \extramarks{}{BIL 16 040114}
+
+
+
+\newpage
+ \extramarks{}{} 
+\noindent {\large HANOVER OCEAN MARINE CLAIMS INFORMATION}
+
+\hfill
+
+\noindent {\large The following information will expedite the handling of claims and protect your rights under the Hanover Ocean Marine insurance policies.}
+
+\begin{center}
+{\large \underline{WHAT TO DO IN THE EVENT OF A LOSS}}
+\end{center}
+
+\begin{enumerate}
+    \item \large{You or your agent should notify ISR and Hanover of all claims for damage to insured vessels or property and all injury claims as soon as the loss occurs.}
+    \hfill
+    \item \large{Serious injuries or death claims should be reported to us immediately by telephone so we can determine the need to dispatch a surveyor, investigator and/or attorney to the accident site.}
+\end{enumerate}
+
+\hfill
+
+\begin{center}
+{\large \underline{CLAIMS REPORTING}}
+\end{center}
+
+\large {\textbf{To report a Hull or Injury claim call:}}
+
+\hfill
+
+The Hanover Claim Hotline at 1-800-628-0250 (Option 2 for Customer Care Team)
+
+\hfill
+
+\textcolor{red}{\textbf{To report a Pollution claim call:}} % change to red?
+
+\hfill
+
+Step 1: Please first contact WQIS at 1-800-736-5750 to report the emergency
+
+\hfill
+
+Step 2: Contact The Hanover Claim Hotline at 1-800-628-0250 (Option 2 for Customer Care Team)
+\extramarks{}{}
+
+
+
+\newpage
+ \extramarks{}{} 
+\begin{center} \textbf{\Large{IMPORTANT INFORMATION ABOUT YOUR INSURANCE COMPANY}} \end{center}
+
+\hfill \break
+
+{The Home Office address for the Insurance Company shown on the policy Declarations page is: }
+
+\hfill \break
+
+\begin{tabbing}
+
+    \hspace{1in} \= \hspace{3in} \= \kill
+
+    \textbf{Allmerica Financial Alliance Insurance Company} \> \> \textbf{The Hanover American Insurance Company} \\
+
+    (\textit{A Stock Company}) \> \> (\textit{A Stock Company}) \\
+
+    440 Lincoln Street \> \> 440 Lincoln Street \\
+
+    Worcester, MA 01653-0002 \> \> Worcester, MA 01653-0002 \\
+
+\end{tabbing}
+
+\begin{tabbing}
+
+    \hspace{1in} \= \hspace{3in} \= \kill
+
+    \textbf{Allmerica Financial Benefit Insurance Company} \> \> \textbf{The Hanover Insurance Company} \\
+
+    (\textit{A Stock Company}) \> \> (\textit{A Stock Company}) \\
+
+    440 Lincoln Street \> \> 440 Lincoln Street \\
+
+    Worcester, MA 01653-0002 \> \> Worcester, MA 01653-0002 \\
+
+\end{tabbing}
+
+\begin{tabbing}
+
+    \hspace{1in} \= \hspace{3in} \= \kill
+
+    \textbf{Campmed Casualty \& Indemnity Company, Inc.} \> \> \textbf{The Hanover Casualty Company} \\
+
+    (\textit{A Stock Company}) \> \> (\textit{A Stock Company}) \\
+
+    440 Lincoln Street \> \> 440 Lincoln Street \\
+
+    Worcester, MA 01653-0002 \> \> Worcester, MA 01653-0002 \\
+
+\end{tabbing}
+
+\begin{tabbing}
+
+    \hspace{1in} \= \hspace{3in} \= \kill
+
+    \textbf{Citizens Insurance Company of America} \> \> \textbf{Massachusetts Bay Insurance Company} \\
+
+    (\textit{A Stock Company}) \> \> (\textit{A Stock Company}) \\
+
+    808 North Highlander Way \> \> 440 Lincoln Street \\
+
+    Howell, MI 48843-1070 \> \> Worcester, MA 01653-0002 \\
+
+\end{tabbing}
+
+\begin{tabbing}
+
+    \hspace{1in} \= \hspace{3in} \= \kill
+
+    \textbf{Citizens Insurance Company of Illinois} \> \> \textbf{The Hanover New Jersey Insurance Company} \\
+
+    (\textit{A Stock Company}) \> \> (\textit{A Stock Company}) \\
+
+    333 West Pierce Road, Suite 300 \> \> 440 Lincoln Street \\
+
+    Itasca, IL 60143-3114 \> \> Worcester, MA 01653-0002 \\
+
+\end{tabbing}
+
+\begin{tabbing}
+
+    \hspace{1in} \= \hspace{3in} \= \kill
+
+    \textbf{Citizens Insurance Company of the Midwest} \> \> \textbf{Verlan Fire Insurance Company} \\
+
+    (\textit{A Stock Company}) \> \> (\textit{A Stock Company}) \\
+
+    9229 Delegates Row, Suite 100 \> \> 440 Lincoln Street \\
+
+    Indianapolis, IN 46240-3824 \> \> Worcester, MA 01653-0002 \\
+
+\end{tabbing}
+
+\begin{tabbing}
+
+    \hspace{1in} \= \hspace{3in} \= \kill
+
+    \textbf{Citizens Insurance Company of Ohio} \> \> \textbf{Nova Casualty Company} \\
+
+    (\textit{A Stock Company}) \> \> (\textit{A Stock Company}) \\
+
+    4400 Easton Commons Way, Suite 125 \> \> 440 Lincoln Street \\
+
+    Columbus, OH 43219-6223 \> \> Worcester, MA 01653-0002 \\
+
+\end{tabbing}
+
+
+\extramarks{}{}
 
 
 \end{document}

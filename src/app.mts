@@ -23,8 +23,12 @@ import path from "path";
 
 const testData = {"Name": "Joe", "Pets": Pets, "CoverageData": CoverageData, "TestString": TestString}
 
+/*
+    Examples
+*/
+
 // Example 1: Using LaTeX
-//TexToPDF('Example1/demo.tex', 'HanoverDemo.pdf')
+//TexToPDF('Example1/demo.tex', 'demo.pdf')
 
 // Example 2: Basic Nunjucks
 //NjkToPDF('Example2/main.njk', 'MyPets.pdf', testData)
@@ -32,4 +36,3 @@ const testData = {"Name": "Joe", "Pets": Pets, "CoverageData": CoverageData, "Te
 // Example 3: Project Structure
 //NjkToPDF('Example3/main.njk', 'MyTable.pdf', testData, {save_tex: true})
 //TexToPDF("MyTable.tex", "MyTable2.pdf", {inputs: ['shared', 'projects/Example3']}) // inputs paths needed to render! Will crash without
-//consolidateTex('MyTable.tex', 'MyTableConsol.tex', 'projects/Example3') // Pastes in input sections. needs directory
