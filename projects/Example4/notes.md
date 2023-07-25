@@ -1,25 +1,97 @@
-## Common issues
+## File structure and "order of operations"
 
-*This section is also in progress*
+LaTeX and Nunjucks stack combined, file structure, common issues
 
-### Imports, inputs, includes, etc
+*This section needs a fair amount of edits, but I'm pushing the existing version since I think there's still some helpful information*
 
-**Importing other tex files does not occur until the tex is compiled**
-There are a variety of ways to import/include/input things in both Nunjucks and LaTeX. This project uses 
-`\input(filepath)` in LaTeX. This is essentially equivalent to copying and pasting the contents of the file into the location where it's called. Other LaTeX import methods exist but may cause unexpected side effects. **Nunjucks will treat these inputs as only plaintext and will not input anything. The input happens at compile time for the resulting tex**
+### File Structure
+Here's an overview of how the file structure works:
 
-Nunjucks also has multiple options. This project uses `from [file] import [functions]`. Nunjucks `include` will render the included file *before* inserting it. Also, be careful with variable scoping. See the Nunjucks documentation for more details.
+```
+src
+	app.mts
+	tools
+		converters.mts
+		node-latex.mts
+projects
+	my-project
+		helpers.njk
+		main.njk
+		preamble.tex
+		sections
+			MySection.tex
+```
 
-### Trouble Shooting
-**Nunjucks errors are very likely caused by either syntax typos or issues with variable syntax**. These issues include escape issues or incorrectly indicating whether something is a variable (using the #! !# tags).
 
-**Tips**
-- Add or remove #! !# tags in Nunjucks
-- Check for typos in tags (such as !# #! instead of #! !#)
-- Check if the `texscape` filter needs to be added or removed
-- Try saving the tex file if the PDF isn't rendering
-- Check where and how the tex file is being compiled (eg pdflatex vs lualatex)
-- Check scoping and that no Nunjucks is present in tex files
-- Check that any tex files include the packages needed (in the preamble) and \begin{document} and \end{document}
-- Try running the LaTeX in Overleaf, which is very helpful for figuring out LaTeX issues without calling Nunjucks repeatedly. Overleaf also has generally helpful error dscriptions (make sure to include the preamble!)
-- Don't worry about LaTeX "warnings", such as "hbox overflow", "badbox", etc. These usually just mean that something is inefficient or not ideal but won't necessarily prevent the document from displaying properly. It's sort of similar to an "import not used" warning.
+**converters.mts** 
+Functions to convert things, Nunjucks config, match previous descript
+
+**node-latex.mts**
+Actually compile tex
+
+**helpers.njk**
+Functions in nunjucks to help, imported into main.njk
+
+**main.njk**
+contains the series of nunjucks and LaTeX commands that should render the entire project PDF. This includes inputting the sections defined in the sections directory.
+
+**preamble.tex**
+Preamble for tex
+
+**sections/MySection.tex**
+Single tex section, won't run on its own, stores "bulk" text. None of the .tex files in *sections/* will compile on their own because they are missing the beginning and end commands and preamble since they are intended to be inserted into a larger document. These files are only separated for code clarity and encapsulation-- they could all be in the same file if desired. Do not use nunjucks commands or variables in a .tex file!
+
+### Order of operations
+Once again note that Nunjucks is only operating on a text level and does not "know" anything about LaTeX. Rendering a nunjucks file will not execute any LaTeX commands.
+
+##### Example: Acceptable Nunjucks function
+```
+[## macro BoringSection() ##]
+\newpage
+\textbf{This is my section.}
+[## endmacro ##]
+```
+
+Calling the function BoringSection() in your Nunjucks file simply replaces the call `BoringSection()` with the text:
+```
+\newpage
+\textbf{This is my section.}
+```
+
+Additionally, this means you *cannot* use Nunjucks variables inside of the .tex files location in the sections directory. Most of the time, this isn't necessary. Headers/footers/titles/tables can be handled in nunjucks (see *BasicPage* and *PlainPage* functions in helpers.njk) and the .tex files in the sections directory should mostly just be body text. However, there are exceptions and work arounds.
+
+##### Example: Vessel clauses option
+One of three options must be selected for the vessel clause. In order to keep this section as its own tex file, we can define a LaTeX variable in the .tex and set it in nunjucks.
+
+In other situations, a Nunjucks function can be created to render the section/figure and that can be called on the variables within the main nunjucks file.
+
+Additionally, Nunjucks macros as called by inserting them into a variable. This is another area to be careful of side effects and errors.
+
+### Escaping characters
+TODO: texscape filter
+
+In normal LaTeX, the following characters need to be escaped (this is not all of them):
+Character           Command to use in text
+&                   \&
+%                   \%
+\                   \textbackslash
+
+Within Nunjucks, you can use "normal" LaTeX **except inside of Nunjucks variables.**
+
+```
+env.addFilter('texscape', function(str) {
+    const fixslash = str.replace(/\\/g, "\\textbackslash");
+    const fixsymbols = fixslash.replace(/(\$|%|&|#|_|\{|\})/g, "\\$1"); // replace tex special characters
+    const fixspecial = fixsymbols.replace(/(\^|~)/g, "\\$1\{\}") // replace tex special characters with a different replacement syntax
+    return fixspecial;
+});
+```
+
+
+
+
+
+
+
+
+
