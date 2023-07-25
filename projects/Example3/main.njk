@@ -1,13 +1,34 @@
-[## from 'Example3/helpers.njk' import genericTable ##]
+[## macro genericTable(MyData, TbWidth="7.25in") ##]
+[## set KeyCol = 'Coverages' ##]
+[## set OtherCols = ['Deductible', 'Amounts or Limits', 'Rate', 'Premium'] ##]
+\newlength\GenericTbWidth
+\setlength\GenericTbWidth{#!TbWidth!#}
+\begin{center}
+\begin{tabular}{ | A{0.3\GenericTbWidth} | A{0.25\GenericTbWidth} | A{0.2\GenericTbWidth} | A{0.1\GenericTbWidth} | A{0.15\GenericTbWidth} | }
+    \hline
+    \textbf{#!KeyCol|texscape!#} [## for eachcol in OtherCols ##] & \textbf{#!eachcol|texscape!#} [## endfor ##] \\
+    \hline
+    [## for key, attrs in MyData ##]
+    \textbf{#!key|texscape!#} [## for eachcol in OtherCols ##] & #!attrs[eachcol]|texscape!# [## endfor ##] \\
+    \hline
+    [## endfor ##]
+\end{tabular}
+\end{center}
+[## endmacro ##]
 
-\input{preamble.tex}
+\documentclass[10pt]{article}
+\usepackage{calc}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage[letterpaper, includeheadfoot, rmargin=0.5in, lmargin=0.5in, 
+top=0.25in, headsep=0.2in, headheight=0.5in, bmargin=0.5in]{geometry}
+
+\setlength\extrarowheight{4pt}
+\setlength\tabcolsep{0.08in}
+\newcolumntype{A}[1]{>{\raggedright\arraybackslash}p{#1 - 2\tabcolsep}}
 
 \begin{document}
 
-\input{sections/mysection.tex}
-
-#!genericTable(CoverageData)!#
-
-\includegraphics[height=0.45in]{images/HanoverLogo2.jpg}
+#!genericTable(Data)!#
 
 \end{document}
